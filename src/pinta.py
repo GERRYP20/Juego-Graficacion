@@ -6,11 +6,9 @@ from pygame.locals import *
 import math
 #from Acciones.sonidos import *
 #import Acciones.textos as tx
-
-package acciones;
-import Acciones.luces as lc
 import Acciones.colores as cl
 import Acciones.objetos as obj
+import Acciones.luces as lc
 import time
 
 
@@ -28,7 +26,7 @@ def pintaEsfera():
     glPushMatrix()
     glTranslatef(posx,posy,posz) 
     lc.iluminacion(1.0,1.0,1.0)
-    cl.colorBeige()
+    cl.matBeige()
     obj.esfera(2,40,80)
     glPopMatrix()
 
@@ -54,6 +52,24 @@ def pintaEsfera3():
     obj.esfera(2,40,80)
     glPopMatrix()  
 
+#Inicio Mike
+
+def pintaEsferaMike(x, y, z, r, sl, seg):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.colorRojo()
+    obj.esfera(r, sl, seg)
+    glPopMatrix()
+
+def pintaCilindroMike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.matAzulMarino()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
 def pintaCilindro():
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_LIGHTING)
@@ -66,6 +82,272 @@ def pintaCilindro():
     obj.cilindro(1, 2, 40)  # (radio, altura, segmentos)
     glPopMatrix()
 
+def pintaCaraMike(x,y,z,r,a):
+    glPushMatrix()
+    glTranslatef(x,y,z)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matDuraznoPiel()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaZapatosMike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(1.0, 1.0, 1.0) 
+    cl.matBlanco()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaBrazoMike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(90, 0, 1, 0)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matAzulMarino()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaOjosMike(x, y, z, r, sl, seg):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matAzulClaro()
+    obj.esfera(r, sl, seg)
+    glPopMatrix()
+
+def pintaBocaSorpresaMike(x, y, z, r, sl, seg):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matNegro()
+    obj.esfera(r, sl, seg)
+    glPopMatrix()
+
+def pintaCilindro2Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matAmarillo()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaEsfera2Mike(x, y, z, r, sl, seg):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.matAmarillo()
+    obj.esfera(r, sl, seg)
+    glPopMatrix()
+
+def pintaManosMike(x, y, z, r, sl, seg):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matDuraznoPiel()
+    obj.esfera(r, sl, seg)
+    glPopMatrix()
+
+def pintaCintasMike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matBlanco()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaCejasMike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(90, 0, 1, 0)
+    lc.iluminacion(0.0, 0.0, 0.0)
+    cl.matNegro()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaBrazo1Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(-200, 0, 1, 0)
+    lc.iluminacion(0.0, 0.0, 0.0) 
+    cl.matAzulMarino()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintarSonrisaMike(cx, cy, cz, ancho=2.0, altura=0.5, resolucion=20):
+    cl.matNegro()
+    glLineWidth(4)  # Grosor de la línea
+    glBegin(GL_LINE_STRIP)
+    for i in range(resolucion + 1):
+        x = -ancho / 2 + (i / resolucion) * ancho 
+        y = -altura * (x ** 2) + altura  
+        glVertex3f(cx + x, cy + y, cz)  
+    glEnd()
+
+def pintaCejasenojado1Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(45, 0, 1, 0)
+    lc.iluminacion(0.0, 0.0, 0.0)
+    cl.matNegro()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaCejasenojado2Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(-45, 0, 1, 0)
+    lc.iluminacion(0.0, 0.0, 0.0)
+    cl.matNegro()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaPierna1Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(90, 1, 0, 0)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.matAzulMarino()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaPierna2Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(45, 1, 0, 0)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.matAzulMarino()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+def pintaPierna3Mike(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glRotatef(-45, 1, 0, 0)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.matAzulMarino()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
+
+
+# seccion para pintar movimientos (Mike)
+def pintarLevantarBrazo():
+    pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
+    pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
+    pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
+    pintaCilindro(0, 0, 3, 2, 7)
+    pintaCilindro(1, 0, 0.5, 0.3, 2.5)
+    pintaCilindro(-1, 0, 0.5, 0.3, 2.5)
+    pintaCaraMike(0, 0, 10, 2, 3.2)
+    pintaZapatosMike(1, 0, 0, 0.6, 1)
+    pintaZapatosMike(-1, 0, 0, 0.6, 1)
+    pintaEsfera(0, 0, 12.8, 2.2, 16, 30)
+    pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
+    pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
+    pintaBrazo1Mike(-3, 0, 12, 0.6, 3.5)
+    pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
+    pintaCilindro2Mike(0, 2, 8, 0.2, 2)
+    pintaEsfera2Mike(0, 2, 8, 0.5, 15, 50)
+    pintaManosMike(-3, 0, 12, 0.5, 15, 50)
+    pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
+    pintaCintasMike(-1, 1.8, 6, 0.1, 4)
+    pintaCintasMike(1, 1.8, 6, 0.1, 4)
+
+def pintarLevantarPierna():
+    pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
+    pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
+    pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
+    pintaCilindro(0, 0, 3, 2, 7)
+    pintaPierna1Mike(1, 3, 3, 0.3, 2.5)
+    pintaCilindro(-1, 0, 0.5, 0.3, 2.5)
+    pintaCaraMike(0, 0, 10, 2, 3.2)
+    pintaZapatosMike(1, 3,2.8, 0.6, 1)
+    pintaZapatosMike(-1, 0, 0, 0.6, 1)
+    pintaEsfera(0, 0, 12.8, 2.2, 16, 30)
+    pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
+    pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
+    pintaBrazoMike(-5.5, 0, 8.3, 0.6, 3.5)
+    pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
+    pintaCilindro2Mike(0, 2, 8, 0.2, 2)
+    pintaEsfera2(0, 2, 8, 0.5, 15, 50)
+    pintaManosMike(-5.5, 0, 8.3, 0.5, 15, 50)
+    pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
+    pintaCintasMike(-1, 1.8, 6, 0.1, 4)
+    pintaCintasMike(1, 1.8, 6, 0.1, 4)
+
+def pintarSaltar():
+    pintaCejasMike(0.5, 1.9, 14.9, 0.1, 1)
+    pintaCejasMike(-1.5, 1.9, 14.9, 0.1, 1)
+    pintaCejasMike(-.5, 2, 13.7, 0.1, 1)
+    pintaCilindro(0, 0, 6, 2, 7)
+    pintaPierna1Mike(1, 3, 6, 0.3, 2.5)
+    pintaCilindro(-1, 0, 3.5, 0.3, 2.5)
+    pintaCaraMike(0, 0, 13, 2, 3.2)
+    pintaZapatosMike(1, 3,5.8, 0.6, 1)
+    pintaZapatosMike(-1, 0, 3, 0.6, 1)
+    pintaEsfera(0, 0, 15.8, 2.2, 16, 30)
+    pintaOjosMike(1, 1.6, 14.5, 0.3, 15, 50)
+    pintaOjosMike(-1, 1.6, 14.5, 0.3, 15, 50)
+    pintaBrazoMike(-5.5, 0, 11.3, 0.6, 3.5)
+    pintaBrazoMike(2, 0, 11.3, 0.6, 3.5)
+    pintaCilindro2Mike(0, 2, 11, 0.2, 2)
+    pintaEsfera2(0, 2, 11, 0.5, 15, 50)
+    pintaManosMike(-5.5, 0, 11.3, 0.5, 15, 50)
+    pintaManosMike(5.5, 0, 11.3, 0.5, 15, 50)
+    pintaCintasMike(-1, 1.8, 9, 0.1, 4)
+    pintaCintasMike(1, 1.8, 9, 0.1, 4)
+
+def pintarAgacharse():
+    pintaCejasMike(0.5, 1.9, 8.9, 0.1, 1)
+    pintaCejasMike(-1.5, 1.9, 8.9, 0.1, 1)
+    pintaCejasMike(-.5, 2, 7.7, 0.1, 1)
+    pintaCilindro(0, 0, 0, 2, 7)
+    pintaPierna1Mike(1, -1.5, .5, 0.3, 2.5)
+    pintaPierna1Mike(-1, -1.5, .5, 0.3, 2.5)
+    pintaCaraMike(0, 0, 7, 2, 3.2)
+    pintaZapatosMike(1, -3.5, .5, 0.6, 1)
+    pintaZapatosMike(-1, -3.5, .5, 0.6, 1)
+    pintaEsfera(0, 0, 9.8, 2.2, 16, 30)
+    pintaOjosMike(1, 1.6, 8.5, 0.3, 15, 50)
+    pintaOjosMike(-1, 1.6, 8.5, 0.3, 15, 50)
+    pintaBrazoMike(-5.5, 0, 5.3, 0.6, 3.5)
+    pintaBrazoMike(2, 0, 5.3, 0.6, 3.5)
+    pintaCilindro2Mike(0, 2, 5, 0.2, 2)
+    pintaEsfera2(0, 2, 5, 0.5, 15, 50)
+    pintaManosMike(-5.5, 0, 5.3, 0.5, 15, 50)
+    pintaManosMike(5.5, 0, 5.3, 0.5, 15, 50)
+    pintaCintasMike(-1, 1.8, 3, 0.1, 4)
+    pintaCintasMike(1, 1.8, 3, 0.1, 4)
+
+def pintarFlexionar():
+    pintaCejasMike(0.5, 1.9, 11.4, 0.1, 1)
+    pintaCejasMike(-1.5, 1.9, 11.4, 0.1, 1)
+    pintaCejasMike(-.5, 2, 10.2, 0.1, 1)
+    pintaCilindro(0, 0, 2.5, 2, 7)
+    pintaPierna2Mike(1, 2, 2, 0.3, 1)
+    pintaPierna2Mike(-1, 2, 2, 0.3, 1)
+    pintaPierna3Mike(1, 1.3, 1.5, 0.3, 1)
+    pintaPierna3Mike(-1, 1.3, 1.5, 0.3, 1)
+    pintaCaraMike(0, 0, 9.5, 2, 3.2)
+    pintaZapatosMike(1, 0.7, .5, 0.6, 1)
+    pintaZapatosMike(-1, .7, .5, 0.6, 1)
+    pintaEsfera(0, 0, 12.3, 2.2, 16, 30)
+    pintaOjosMike(1, 1.6, 11, 0.3, 15, 50)
+    pintaOjosMike(-1, 1.6, 11, 0.3, 15, 50)
+    pintaBrazoMike(-5.5, 0, 7.8, 0.6, 3.5)
+    pintaBrazoMike(2, 0, 7.8, 0.6, 3.5)
+    pintaCilindro2Mike(0, 2, 7.5, 0.2, 2)
+    pintaEsfera2(0, 2, 7.5, 0.5, 15, 50)
+    pintaManosMike(-5.5, 0, 7.8, 0.5, 15, 50)
+    pintaManosMike(5.5, 0, 7.8, 0.5, 15, 50)
+    pintaCintasMike(-1, 1.8, 5.5, 0.1, 4)
+    pintaCintasMike(1, 1.8, 5.5, 0.1, 4)
+
+#huesos
+
+def pintaHuesos():
+    obj.figura_completa()
+
+#Inicio Mapache
 
 def pintaMapache():
     global tiempo_inicial
@@ -95,14 +377,14 @@ def pintaMapache():
     glPushMatrix()
     glTranslatef(posx + 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
     lc.iluminacion(1.0, 1.0, 1.0)
-    cl.colorNegro()  # Ojos en color negro
+    cl.colorNegroPlano()  # Ojos en color negro
     obj.esfera(0.3, 20, 20)  # Esfera pequeña para el ojo
     glPopMatrix()
 
     # 🔹 Ojo izquierdo
     glPushMatrix()
     glTranslatef(posx - 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
-    cl.colorNegro()
+    cl.colorNegroPlano()
     obj.esfera(0.3, 20, 20)
     glPopMatrix()
 
@@ -206,7 +488,7 @@ def pintaMapache():
     glTranslatef(posx + 0.6, posy + 5.3, posz + 1.2)  # Ajusta la posición sobre el ojo derecho
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -215,7 +497,7 @@ def pintaMapache():
     glTranslatef(posx - 0.6, posy + 5.3, posz + 1.2)  # Ajusta la posición sobre el ojo izquierdo
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -223,7 +505,7 @@ def pintaMapache():
     glPushMatrix()
     glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -231,7 +513,7 @@ def pintaMapache():
     glPushMatrix()
     glTranslatef(posx, posy + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
 
@@ -261,14 +543,14 @@ def pintaMapacheEnojado():
     glPushMatrix()
     glTranslatef(posx + 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
     lc.iluminacion(1.0, 1.0, 1.0)
-    cl.colorNegro()  # Ojos en color negro
+    cl.colorNegroPlano()  # Ojos en color negro
     obj.esfera(0.3, 20, 20)  # Esfera pequeña para el ojo
     glPopMatrix()
 
     # 🔹 Ojo izquierdo
     glPushMatrix()
     glTranslatef(posx - 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
-    cl.colorNegro()
+    cl.colorNegroPlano()
     obj.esfera(0.3, 20, 20)
     glPopMatrix()
 
@@ -376,7 +658,7 @@ def pintaMapacheEnojado():
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glRotatef(20, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -386,7 +668,7 @@ def pintaMapacheEnojado():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(-20, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -394,7 +676,7 @@ def pintaMapacheEnojado():
     glPushMatrix()
     glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -402,7 +684,7 @@ def pintaMapacheEnojado():
     glPushMatrix()
     glTranslatef(posx, posy + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
 
@@ -429,14 +711,14 @@ def pintaMapacheFeliz():
     glPushMatrix()
     glTranslatef(posx + 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
     lc.iluminacion(1.0, 1.0, 1.0)
-    cl.colorNegro()  # Ojos en color negro
+    cl.colorNegroPlano()  # Ojos en color negro
     obj.esfera(0.3, 20, 20)  # Esfera pequeña para el ojo
     glPopMatrix()
 
     # 🔹 Ojo izquierdo
     glPushMatrix()
     glTranslatef(posx - 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
-    cl.colorNegro()
+    cl.colorNegroPlano()
     obj.esfera(0.3, 20, 20)
     glPopMatrix()
 
@@ -542,7 +824,7 @@ def pintaMapacheFeliz():
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -552,7 +834,7 @@ def pintaMapacheFeliz():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -580,7 +862,7 @@ def pintaMapacheFeliz():
     glPushMatrix()
     glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -588,7 +870,7 @@ def pintaMapacheFeliz():
     glPushMatrix()
     glTranslatef(posx, posy + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
 
@@ -615,14 +897,14 @@ def pintaMapacheTriste():
     glPushMatrix()
     glTranslatef(posx + 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
     lc.iluminacion(1.0, 1.0, 1.0)
-    cl.colorNegro()  # Ojos en color negro
+    cl.colorNegroPlano()  # Ojos en color negro
     obj.esfera(0.3, 20, 20)  # Esfera pequeña para el ojo
     glPopMatrix()
 
     # 🔹 Ojo izquierdo
     glPushMatrix()
     glTranslatef(posx - 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
-    cl.colorNegro()
+    cl.colorNegroPlano()
     obj.esfera(0.3, 20, 20)
     glPopMatrix()
 
@@ -728,7 +1010,7 @@ def pintaMapacheTriste():
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glRotatef(-20, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -738,7 +1020,7 @@ def pintaMapacheTriste():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(20, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -746,7 +1028,7 @@ def pintaMapacheTriste():
     glPushMatrix()
     glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -754,7 +1036,7 @@ def pintaMapacheTriste():
     glPushMatrix()
     glTranslatef(posx, posy + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
 
@@ -795,14 +1077,14 @@ def pintaMapacheSaltando():
     glPushMatrix()
     glTranslatef(posx + 0.6, posy_salto + 4.8, posz + 1.3)  # Ajusta la posición
     lc.iluminacion(1.0, 1.0, 1.0)
-    cl.colorNegro()  # Ojos en color negro
+    cl.colorNegroPlano()  # Ojos en color negro
     obj.esfera(0.3, 20, 20)  # Esfera pequeña para el ojo
     glPopMatrix()
 
     # 🔹 Ojo izquierdo
     glPushMatrix()
     glTranslatef(posx - 0.6, posy_salto + 4.8, posz + 1.3)  # Ajusta la posición
-    cl.colorNegro()
+    cl.colorNegroPlano()
     obj.esfera(0.3, 20, 20)
     glPopMatrix()
 
@@ -908,7 +1190,7 @@ def pintaMapacheSaltando():
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -918,7 +1200,7 @@ def pintaMapacheSaltando():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -926,7 +1208,7 @@ def pintaMapacheSaltando():
     glPushMatrix()
     glTranslatef(posx, posy_salto + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -934,7 +1216,7 @@ def pintaMapacheSaltando():
     glPushMatrix()
     glTranslatef(posx, posy_salto + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
 
@@ -970,14 +1252,14 @@ def pintaMapacheDuda():
     glPushMatrix()
     glTranslatef(posx + 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
     lc.iluminacion(1.0, 1.0, 1.0)
-    cl.colorNegro()  # Ojos en color negro
+    cl.colorNegroPlano()  # Ojos en color negro
     obj.esfera(0.3, 20, 20)  # Esfera pequeña para el ojo
     glPopMatrix()
 
     # 🔹 Ojo izquierdo
     glPushMatrix()
     glTranslatef(posx - 0.6, posy + 4.8, posz + 1.3)  # Ajusta la posición
-    cl.colorNegro()
+    cl.colorNegroPlano()
     obj.esfera(0.3, 20, 20)
     glPopMatrix()
 
@@ -1081,7 +1363,7 @@ def pintaMapacheDuda():
     glTranslatef(posx + 0.6, posy + 5.3, posz + 1.2)  # Ajusta la posición sobre el ojo derecho
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -1091,7 +1373,7 @@ def pintaMapacheDuda():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(-20, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -1099,7 +1381,7 @@ def pintaMapacheDuda():
     glPushMatrix()
     glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -1107,7 +1389,7 @@ def pintaMapacheDuda():
     glPushMatrix()
     glTranslatef(posx, posy + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
 
@@ -1142,7 +1424,7 @@ def pintaMapacheCaminando():
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.8, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -1152,7 +1434,7 @@ def pintaMapacheCaminando():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.8, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -1260,7 +1542,7 @@ def pintaMapacheCaminando():
     glRotatef(90, 1, 0, 0)  # Para que la ceja quede recta horizontalmente
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea más delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -1270,7 +1552,7 @@ def pintaMapacheCaminando():
     glRotatef(90, 1, 0, 0)  # Igual que la ceja derecha
     glRotatef(0, 0, 1, 0)  # Para que la ceja quede recta horizontalmente
     glScalef(1.2, 0.2, 0.2)  # Escala para que sea delgada
-    cl.colorNegro()  # Color negro para la ceja
+    cl.colorNegroPlano()  # Color negro para la ceja
     obj.cilindro(0.35, 0.7, 10)  # Radio, altura y segmentos del cilindro
     glPopMatrix()
 
@@ -1278,7 +1560,7 @@ def pintaMapacheCaminando():
     glPushMatrix()
     glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
     glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlanco()  # Color blanco para la base
+    cl.colorBlancoPlano()  # Color blanco para la base
     obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
@@ -1286,12 +1568,10 @@ def pintaMapacheCaminando():
     glPushMatrix()
     glTranslatef(posx, posy + 4.3, posz + 1.55)  # Un poco más arriba y adelante
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
-    cl.colorNegro()  # Color negro para la parte superior
+    cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
     glPopMatrix()
-    
-    
-
+        
 def pintaCono():
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_LIGHTING)
