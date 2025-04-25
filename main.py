@@ -18,6 +18,7 @@ pelota_velocidad = 2 # Aumenté la velocidad
 pelota_activa = False  # Solo activa cuando presiones 'i'
 radio_pelota = 1.5
 
+
 # Variables para la segunda pelota
 pelota2_pos = [0, 50, 0]  # Empieza arriba
 pelota2_direccion = [0, -1, 0]  # Baja hacia el personaje
@@ -26,11 +27,12 @@ pelota2_activa = False
 radio_pelota2 = 1.5
 
 
-def iniciar_juego():
+def iniciar_juego(personaje):
     mostrar_mike = False
     mostrar_huesos = False
     global pelota_activa
     global pelota2_pos, pelota2_direccion, pelota2_activa
+    
     velocidad_camara = 0.1
     velocidad_rotacion = 0.2
     raton = 0.1
@@ -60,8 +62,8 @@ def iniciar_juego():
     #indice del suelo actual
     suelo_actual = 0
     # Variable para controlar el tipo de mapache
-    mapache_actual = pt.pintaMapache  # Por defecto, dibuja el mapache original
 
+    
     pygame.init()
     pygame.mixer.init()
     glutInit()
@@ -168,6 +170,8 @@ def iniciar_juego():
 
     # Funciones para pintar
     def pintarcambiosMike():
+        glRotatef(-90, 1, 0, 0)
+        glRotatef(180, 0, 0, 1)
         pt.pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
         pt.pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
         pt.pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
@@ -184,6 +188,7 @@ def iniciar_juego():
         pt.pintaCintasMike(-1, 1.8, 6, 0.1, 4)
         pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
     def pintacuerpoMike():
+        glRotatef(-90, 1, 0, 0)
         pt.pintaCilindro(0, 0, 3, 2, 7)
         pt.pintaCara(0, 0, 10, 2, 3.2)
         pt.pintaEsfera(0, 0, 12.8, 2.2, 16, 30)
@@ -193,28 +198,42 @@ def iniciar_juego():
         pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
         pt.pintaEsfera2(0, 2, 8, 0.5, 15, 50)
     def pintarsincambiosMike():
-        pt.pintaCejas(0.5, 1.9, 11.9, 0.1, 1)
-        pt.pintaCejas(-1.5, 1.9, 11.9, 0.1, 1)
-        pt.pintaCejas(-.5, 2, 10.7, 0.1, 1)
-        pt.pintaCilindro(0, 0, 3, 2, 7)
-        pt.pintaCilindro(1, 0, 0.5, 0.3, 2.5)
-        pt.pintaCilindro(-1, 0, 0.5, 0.3, 2.5)
-        pt.pintaCara(0, 0, 10, 2, 3.2)
-        pt.pintaZapatos(1, 0, 0, 0.6, 1)
-        pt.pintaZapatos(-1, 0, 0, 0.6, 1)
-        pt.pintaEsfera(0, 0, 12.8, 2.2, 16, 30)
+        glPushMatrix()
+        glRotatef(-90, 1, 0, 0)
+        glRotatef(180, 0, 0, 1)
+        pt.pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
+        pt.pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
+        pt.pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
+        pt.pintaCilindroMike(0, 0, 3, 2, 7)
+        pt.pintaCilindroMike(1, 0, 0.5, 0.3, 2.5)
+        pt.pintaCilindroMike(-1, 0, 0.5, 0.3, 2.5)
+        pt.pintaCaraMike(0, 0, 10, 2, 3.2)
+        pt.pintaZapatosMike(1, 0, 0, 0.6, 1)
+        pt.pintaZapatosMike(-1, 0, 0, 0.6, 1)
+        pt.pintaEsferaMike(0, 0, 12.8, 2.2, 16, 30)
         pt.pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
         pt.pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
         pt.pintaBrazoMike(-5.5, 0, 8.3, 0.6, 3.5)
         pt.pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
-        pt.pintaCilindro2(0, 2, 8, 0.2, 2)
-        pt.pintaEsfera2(0, 2, 8, 0.5, 15, 50)
+        pt.pintaCilindro2Mike(0, 2, 8, 0.2, 2)
+        pt.pintaEsfera2Mike(0, 2, 8, 0.5, 15, 50)
         pt.pintaManosMike(-5.5, 0, 8.3, 0.5, 15, 50)
         pt.pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
         pt.pintaCintasMike(-1, 1.8, 6, 0.1, 4)
         pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
 
+        glPopMatrix()
 
+
+    # Elegir personaje según lo seleccionado en el menú
+    if personaje == "mapache":
+        personaje_dibujar = pt.pintaMapache
+    elif personaje == "huesos":
+        personaje_dibujar = pt.pintaHuesos
+    elif personaje == "mike":
+        personaje_dibujar = pintarsincambiosMike
+    else:
+        personaje_dibujar = pt.pintaMapache
 
 
     while True:
@@ -311,14 +330,7 @@ def iniciar_juego():
         es.pinta_escenario(escenarios[escenario_actual],suelos[suelo_actual])  # Dibujar el escenario actual
 
         # Llamar a la función de dibujo del personaje
-        if mostrar_mike:
-            pintarcambiosMike()
-        elif mostrar_huesos:
-            pt.pintaHuesos()
-        else:
-            mapache_actual()
-        
-                            
+        personaje_dibujar()                        
 
         # Mostrar texto solo en el escenario 7
         if escenario_actual == 6:  # Escenario 7 (índice 6)

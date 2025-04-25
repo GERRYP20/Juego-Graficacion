@@ -58,7 +58,7 @@ def pintaEsferaMike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
     lc.iluminacion(0.0, 0.0, 0.0)  
-    cl.colorRojo()
+    cl.matRojo()
     obj.esfera(r, sl, seg)
     glPopMatrix()
 
