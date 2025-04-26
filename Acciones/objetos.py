@@ -5,6 +5,8 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from pygame.locals import *
 
+frame = 0  # Inicializa el contador de animación
+
 def esfera(radio, slices, segmentos):
     for i in range(slices):
         lat0 = math.pi * (-0.5 + i / slices)
@@ -219,33 +221,33 @@ def figura_completa():
 def camina():
     global frame
     frame += 1
-    angulo = math.sin(frame * 0.03) * 20  # Menor frecuencia y amplitud
+    angulo = math.sin(frame * 0.05) * 20  # Movimiento más suave
 
-    # Cuerpo
+    # Cuerpo (ligeramente más bajo)
     glPushMatrix()
-    glTranslatef(0.0, 1.0, 0.0)
+    glTranslatef(0.0, 2.0, 0.0)  # Antes: 4.0
     glColor3f(0.0, 0.5, 0.0)
-    piramide(base=3.5, altura=2.5)
+    piramide(base=7.0, altura=5.0)
     glPopMatrix()
 
-    # Parte inferior del torso
+    # Parte inferior del torso (también bajada)
     glPushMatrix()
-    glTranslatef(0.0, 1.0, 0.0)
+    glTranslatef(0.0, 2.0, 0.0)  # Antes: 4.0
     glRotatef(180, 1, 0, 0)
     glColor3f(1.0, 0.0, 0.0)
-    piramide_truncada(base_inf=2.5, base_sup=1.0, altura=1.0)
+    piramide_truncada(base_inf=5.0, base_sup=2.0, altura=2.0)
     glPopMatrix()
 
     # Cabeza con ojos
     cabeza_con_ojos()
 
     # Piernas animadas
-    posiciones = [(-1.5, 1.5), (1.5, 1.5), (-1.5, -1.5), (1.5, -1.5)]
+    posiciones = [(-3.0, 3.0), (3.0, 3.0), (-3.0, -3.0), (3.0, -3.0)]
     colores = [(0.0, 0.0, 1.0), (1.0, 1.0, 0.0), (0.0, 1.0, 1.0), (1.0, 0.0, 1.0)]
 
     for i, ((x, z), color) in enumerate(zip(posiciones, colores)):
         glPushMatrix()
-        glTranslatef(x, -1.0, z)
+        glTranslatef(x, -2.0, z)
 
         if i % 2 == 0:
             glRotatef(angulo, 1, 0, 0)
@@ -253,6 +255,5 @@ def camina():
             glRotatef(-angulo, 1, 0, 0)
 
         glColor3f(*color)
-        piramide_truncada(base_inf=1.0, base_sup=0.5, altura=2.0)
+        piramide_truncada(base_inf=2.0, base_sup=1.0, altura=4.0)
         glPopMatrix()
-

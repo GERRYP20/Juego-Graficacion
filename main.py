@@ -28,6 +28,9 @@ radio_pelota2 = 1.5
 
 
 def iniciar_juego(personaje):
+    
+    es.ultimo_fondo = None
+    es.ultimo_suelo = None
     mostrar_mike = False
     mostrar_huesos = False
     global pelota_activa
@@ -63,9 +66,10 @@ def iniciar_juego(personaje):
     suelo_actual = 0
     # Variable para controlar el tipo de mapache
 
-    
+    pygame.quit()
     pygame.init()
     pygame.mixer.init()
+    pygame.init()
     glutInit()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     display = (800,600)
@@ -169,34 +173,7 @@ def iniciar_juego(personaje):
         return distancia < (radio_pelota + radio_personaje)
 
     # Funciones para pintar
-    def pintarcambiosMike():
-        glRotatef(-90, 1, 0, 0)
-        glRotatef(180, 0, 0, 1)
-        pt.pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
-        pt.pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
-        pt.pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
-        pt.pintaCilindroMike(1, 0, 0.5, 0.3, 2.5)
-        pt.pintaCilindroMike(-1, 0, 0.5, 0.3, 2.5)
-        pt.pintaZapatosMike(1, 0, 0, 0.6, 1)
-        pt.pintaZapatosMike(-1, 0, 0, 0.6, 1)
-        pt.pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
-        pt.pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
-        pt.pintaBrazoMike(-5.5, 0, 8.3, 0.6, 3.5)
-        pt.pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
-        pt.pintaManosMike(-5.5, 0, 8.3, 0.5, 15, 50)
-        pt.pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
-        pt.pintaCintasMike(-1, 1.8, 6, 0.1, 4)
-        pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
-    def pintacuerpoMike():
-        glRotatef(-90, 1, 0, 0)
-        pt.pintaCilindro(0, 0, 3, 2, 7)
-        pt.pintaCara(0, 0, 10, 2, 3.2)
-        pt.pintaEsfera(0, 0, 12.8, 2.2, 16, 30)
-        pt.pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
-        pt.pintaCilindro2(0, 2, 8, 0.2, 2)
-        pt.pintaCintasMike(-1, 1.8, 6, 0.1, 4)
-        pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
-        pt.pintaEsfera2(0, 2, 8, 0.5, 15, 50)
+   
     def pintarsincambiosMike():
         glPushMatrix()
         glRotatef(-90, 1, 0, 0)
@@ -254,38 +231,80 @@ def iniciar_juego(personaje):
                 if event.key == pygame.K_1:
                     escenario_actual = 0
                     suelo_actual = 0
-                    mapache_actual = pt.pintaMapache  # Dibujar el mapache original
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapache
+                    elif personaje == "mike":
+                        personaje_dibujar = pintarsincambiosMike
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/campanas.wav')
+
                 elif event.key == pygame.K_2:
                     escenario_actual = 1
                     suelo_actual = 0
-                    mapache_actual = pt.pintaMapacheEnojado  
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapacheEnojado
+                    elif personaje == "mike":
+                        personaje_dibujar = pt.pintaMike1
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos2
                     sd.sonidoOn('Sonidos/rayos.wav')
+
                 elif event.key == pygame.K_3:
                     escenario_actual = 2
                     suelo_actual = 0
-                    mapache_actual = pt.pintaMapacheFeliz
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapacheFeliz
+                    elif personaje == "mike":
+                        personaje_dibujar = pt.pintaMike2
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/aves.wav')
+
                 elif event.key == pygame.K_4:
                     escenario_actual = 3
                     suelo_actual = 0
-                    mapache_actual = pt.pintaMapacheTriste
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapacheTriste
+                    elif personaje == "mike":
+                        personaje_dibujar = pt.pintaMike3
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/estrella.wav')
+
                 elif event.key == pygame.K_5:
                     escenario_actual = 4
                     suelo_actual = 0
-                    mapache_actual = pt.pintaMapacheSaltando
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapacheSaltando
+                    elif personaje == "mike":
+                        personaje_dibujar = pt.pintaMike4
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/tada.wav')
+
                 elif event.key == pygame.K_6:
                     escenario_actual = 5
                     suelo_actual = 0
-                    mapache_actual = pt.pintaMapacheDuda
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapacheDuda
+                    elif personaje == "mike":
+                        personaje_dibujar = pt.pintaMike5
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/insectos.wav')
+
                 elif event.key == pygame.K_7:
                     escenario_actual = 6
                     suelo_actual = 1
-                    mapache_actual = pt.pintaMapacheCaminando
+                    if personaje == "mapache":
+                        personaje_dibujar = pt.pintaMapacheCaminando
+                    elif personaje == "mike":
+                        personaje_dibujar = pintarsincambiosMike
+                    elif personaje == "huesos":
+                        personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/mar.wav')
+
                 if event.key == pygame.K_l and escenario_actual == 0:  # Solo en el escenario 1
                     saludando = not saludando  # Alternar el estado de saludo
                 if event.key == pygame.K_i:
@@ -296,10 +315,8 @@ def iniciar_juego(personaje):
                     pelota2_activa = True
                     pelota2_pos = [0, 50, 0]  # Reinicia posición
                     pelota2_direccion = [0, -1, 0]  # Hacia abajo
-                if event.key == pygame.K_j:
-                    mostrar_mike = not mostrar_mike
-                if event.key == pygame.K_CAPSLOCK:    
-                    mostrar_huesos = not mostrar_huesos
+                if event.key == pygame.K_m:
+                    return  # Esto te saca del juego y vuelve al menú
    
         # Movimiento de cámara con teclado
         keys = pygame.key.get_pressed()
