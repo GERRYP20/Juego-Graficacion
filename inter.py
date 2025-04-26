@@ -1,5 +1,3 @@
-# inter.py
-
 import pygame
 from pygame.locals import *
 from OpenGL.GL import *
@@ -7,6 +5,8 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import src.pinta as pt
 import Acciones.escenarios as es
+import Acciones.textos as txt
+
 
 def pintarsincambiosMike():
     glRotatef(-90, 1, 0, 0)
@@ -65,11 +65,12 @@ def configurar_opengl():
 
     gluPerspective(45, (display[0] / display[1]), 0.1, 500.0)
 
-    glTranslatef(0, -7, -40)
+    glTranslatef(0, -7, -30)
     glRotatef(15, 1, 0, 0)
+    
 
     pygame.event.set_grab(True)
-    pygame.mouse.set_visible(False)
+    pygame.mouse.set_visible(True)
 
 def seleccion_de_personaje():
     configurar_opengl()
@@ -78,11 +79,11 @@ def seleccion_de_personaje():
     character_changed = False
     character_angles = [0, 0, 0]
 
-    personajes = [pintarsincambiosMike, pt.pintaMapache, pt.pintaHuesos]
-    nombres_personajes = ["mike", "mapache", "huesos"]
+    personajes = [pt.pintaMapache, pt.pintaHuesos, pintarsincambiosMike]
+    nombres_personajes = ["mapache", "huesos", "mike"]
 
     while True:
-        for event in pygame.event.get():
+        for event in pygame.event.get():    
             if event.type == QUIT:
                 pygame.quit()
                 quit()
@@ -95,21 +96,29 @@ def seleccion_de_personaje():
                     character_changed = True
                 elif event.key == K_RETURN:
                     pygame.quit()
-                    return nombres_personajes[selected_character]  # 🔄 Aquí devolvemos el nombre
+                    return nombres_personajes[selected_character]
+                elif event.key == K_ESCAPE:  
+                    pygame.quit()  
+                    quit()    
 
             if event.type == KEYUP:
                 if event.key in (K_LEFT, K_RIGHT):
                     character_changed = False
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
+        es.pinta_escenario2("Imagenes/SoteImage.png", "Imagenes/pisoSote.png")
+        txt.text("¡SELECCIONA TU PERSONAJE!", -17, 12, -18, 50, 255, 255, 255, 0, 0, 255)
+        txt.text("HUESOS", -1.5, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
+        txt.text("GATOPACHE KEVIN", -11, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
+        txt.text("RAPERO MIKEE", 7, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
         posiciones = [-12, 0, 12]
+
         for i, personaje in enumerate(personajes):
             draw_base(posiciones[i], selected_character == i)
             glPushMatrix()
             glTranslatef(posiciones[i], 0, 0)
             if selected_character == i:
-                character_angles[i] += 1
+                character_angles[i] += 15
             glRotatef(character_angles[i], 0, 1, 0)
             glScalef(0.5, 0.5, 0.5)
             personaje()

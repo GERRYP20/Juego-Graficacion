@@ -49,12 +49,28 @@ def mostrar_menu(fondo_path="Menu.jpg"):
                     elif seleccion == 2:
                         pygame.quit()
                         sys.exit()
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                for i, opcion in enumerate(opciones):
+                    texto = fuente.render(opcion, True, (0, 255, 255) if i == seleccion else (255, 255, 255))
+                    texto_rect = texto.get_rect(center=(650, 150 + i * 80))
+                    boton_rect = texto_rect.inflate(60, 30)
+
+                    # Comprobar si el clic está dentro del rectángulo del botón
+                    if boton_rect.collidepoint(mouse_x, mouse_y):
+                        if i == 0:
+                            return "jugar"
+                        elif i == 1:
+                            print("Opciones aún no implementadas.")
+                        elif i == 2:
+                            pygame.quit()
+                            sys.exit()
 
         for i, opcion in enumerate(opciones):
             texto = fuente.render(opcion, True, (0, 255, 255) if i == seleccion else (255, 255, 255))
-            texto_rect = texto.get_rect(center=(400, 200 + i * 80))
+            texto_rect = texto.get_rect(center=(650, 150 + i * 80))
 
-            # Botón estilo arcade
+            
             boton_rect = texto_rect.inflate(60, 30)
             color_fondo = (0, 30, 60) if i == seleccion else (0, 0, 0)
             borde_color = (0, 255, 255) if i == seleccion else (255, 0, 255)

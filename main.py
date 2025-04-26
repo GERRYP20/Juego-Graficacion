@@ -358,22 +358,16 @@ def iniciar_juego(personaje):
         tx.text("Para mover la camara usar: a,s,d,w,z,x",-25,34,0,20,0,0,0,255,255,255)
         tx.text("Camara en posicion original: c",-25,32,0,20,0,0,0,255,255,255)
         tx.text("Encender sonido general: p",-25,30,0,20,0,0,0,255,255,255)
-        tx.text("Apagar sonido general: o",-25,28,0,20,0,0,0,255,255,255)
         tx.text("Colision 1: i",-25,26,0,20,0,0,0,255,255,255)
         tx.text("Colision 2: u",-25,24,0,20,0,0,0,255,255,255)
         tx.text("Salir: ESC",-25,22,0,20,0,0,0,255,255,255)
         tx.text("Graficacion",30,38,0,20,0,0,0,255,255,255)
-        tx.text("Ana Barbara Rivera Guia",30,36,0,20,0,0,0,255,255,255)
-        tx.text("No. Control: C22280873",30,34,0,20,0,0,0,255,255,255)
         mover_pelota()
         if pelota_activa:
             dibujar_pelota()
         mover_pelota2()
         if pelota2_activa:
             dibujar_pelota2()
-
-
-
         pygame.display.flip()
         pygame.time.wait(10)
     

@@ -132,3 +132,64 @@ def pinta_escenario(filename_paredes, filename_suelo):
 
     glDisable(GL_TEXTURE_2D)  # Desactivar texturas después de pintar
 
+
+def pinta_escenario2(imagen_pared, imagen_suelo):
+    textura_paredes_id = cargar_textura(imagen_pared)
+    textura_suelo_id = cargar_textura(imagen_suelo)
+
+    if textura_paredes_id is None or textura_suelo_id is None:
+        print("[ERROR] No se pudo cargar una o ambas texturas del escenario.")
+        return
+
+    glEnable(GL_TEXTURE_2D)
+    glDisable(GL_CULL_FACE)
+
+    glPushMatrix()
+    try:
+        piso_y = -10
+        techo_y = 20
+
+        # Paredes
+        glBindTexture(GL_TEXTURE_2D, textura_paredes_id)
+        glBegin(GL_QUADS)
+        # Fondo
+        glTexCoord2f(0, 0); glVertex3f(-20, piso_y, -20)
+        glTexCoord2f(1, 0); glVertex3f( 20, piso_y, -20)
+        glTexCoord2f(1, 1); glVertex3f( 20, techo_y, -20)
+        glTexCoord2f(0, 1); glVertex3f(-20, techo_y, -20)
+        # Laterales
+        glTexCoord2f(0, 0); glVertex3f(-20, piso_y,  20)
+        glTexCoord2f(1, 0); glVertex3f(-20, piso_y, -20)
+        glTexCoord2f(1, 1); glVertex3f(-20, techo_y, -20)
+        glTexCoord2f(0, 1); glVertex3f(-20, techo_y,  20)
+
+        glTexCoord2f(0, 0); glVertex3f(20, piso_y, -20)
+        glTexCoord2f(1, 0); glVertex3f(20, piso_y,  20)
+        glTexCoord2f(1, 1); glVertex3f(20, techo_y,  20)
+        glTexCoord2f(0, 1); glVertex3f(20, techo_y, -20)
+        glEnd()
+
+        # Piso
+        glBindTexture(GL_TEXTURE_2D, textura_suelo_id)
+        glBegin(GL_QUADS)
+        glTexCoord2f(0, 0); glVertex3f(-20, piso_y,  20)
+        glTexCoord2f(1, 0); glVertex3f( 20, piso_y,  20)
+        glTexCoord2f(1, 1); glVertex3f( 20, piso_y, -20)
+        glTexCoord2f(0, 1); glVertex3f(-20, piso_y, -20)
+        glEnd()
+        
+        # Techo
+        glBindTexture(GL_TEXTURE_2D, textura_suelo_id)  # Usamos la misma textura de paredes
+        glBegin(GL_QUADS)
+        # Techo
+        glTexCoord2f(0, 0); glVertex3f(-20, techo_y, -20)
+        glTexCoord2f(1, 0); glVertex3f( 20, techo_y, -20)
+        glTexCoord2f(1, 1); glVertex3f( 20, techo_y,  20)
+        glTexCoord2f(0, 1); glVertex3f(-20, techo_y,  20)
+        glEnd()
+
+    except Exception as e:
+        print(f"[ERROR] Durante dibujo del escenario: {e}")
+    finally:
+        glPopMatrix()
+        glDisable(GL_TEXTURE_2D)
