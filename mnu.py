@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-import datos as dat
+import creditos as cred
 def mostrar_menu(fondo_path="Menu.jpg"):
     pygame.init()
     pantalla = pygame.display.set_mode((800, 600))
@@ -45,7 +45,7 @@ def mostrar_menu(fondo_path="Menu.jpg"):
                     if seleccion == 0:
                         return "jugar"
                     elif seleccion == 1:
-                        dat.mostrar_nombres(fondo_path)
+                        cred.mostrar_nombres(fondo_path)
                     elif seleccion == 2:
                         pygame.quit()
                         sys.exit()

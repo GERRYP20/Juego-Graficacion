@@ -1,5 +1,5 @@
 from mnu import mostrar_menu
-from inter import seleccion_de_personaje
+from seleccion_personaje import seleccion_de_personaje
 from main import iniciar_juego 
 from Acciones.sonidos import *
 

@@ -8,6 +8,8 @@ import Acciones.escenarios as es
 import Acciones.textos as txt
 
 
+
+
 def draw_base(x_offset, selected):
     base_size = 2.0
     glColor3f(1, 1, 0) if selected else glColor3f(0.5, 0.5, 0.5)
