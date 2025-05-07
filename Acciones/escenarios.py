@@ -81,53 +81,53 @@ def pinta_escenario(filename_paredes, filename_suelo):
     glBindTexture(GL_TEXTURE_2D, textura_paredes_id)
     glColor3f(1.0, 1.0, 1.0)
 
-    # 🔹 Pared 1
+ # 🔹 Pared 1 (Aumenta las dimensiones)
     glBegin(GL_QUADS)
-    glTexCoord2f(0, 0); glVertex3f(-50, 0, 50)
-    glTexCoord2f(1, 0); glVertex3f(50, 0, 50)
-    glTexCoord2f(1, 1); glVertex3f(50, 100, 50)
-    glTexCoord2f(0, 1); glVertex3f(-50, 100, 50)
+    glTexCoord2f(0, 0); glVertex3f(-100, 0, 100)  # Aumentar valores
+    glTexCoord2f(1, 0); glVertex3f(100, 0, 100)
+    glTexCoord2f(1, 1); glVertex3f(100, 200, 100)  # Aumentar valores
+    glTexCoord2f(0, 1); glVertex3f(-100, 200, 100)
     glEnd()
 
-    # 🔹 Pared 2
+    # 🔹 Pared 2 (Aumenta las dimensiones)
     glBegin(GL_QUADS)
-    glTexCoord2f(0, 0); glVertex3f(50, 0, 50)
-    glTexCoord2f(1, 0); glVertex3f(50, 0, -50)
-    glTexCoord2f(1, 1); glVertex3f(50, 100, -50)
-    glTexCoord2f(0, 1); glVertex3f(50, 100, 50)
+    glTexCoord2f(0, 0); glVertex3f(100, 0, 100)
+    glTexCoord2f(1, 0); glVertex3f(100, 0, -100)  # Aumentar valores
+    glTexCoord2f(1, 1); glVertex3f(100, 200, -100)  # Aumentar valores
+    glTexCoord2f(0, 1); glVertex3f(100, 200, 100)
     glEnd()
 
-    # 🔹 Pared 3
+    # 🔹 Pared 3 (Aumenta las dimensiones)
     glBegin(GL_QUADS)
-    glTexCoord2f(0, 0); glVertex3f(50, 0, -50)
-    glTexCoord2f(1, 0); glVertex3f(-50, 0, -50)
-    glTexCoord2f(1, 1); glVertex3f(-50, 100, -50)
-    glTexCoord2f(0, 1); glVertex3f(50, 100, -50)
+    glTexCoord2f(0, 0); glVertex3f(100, 0, -100)
+    glTexCoord2f(1, 0); glVertex3f(-100, 0, -100)  # Aumentar valores
+    glTexCoord2f(1, 1); glVertex3f(-100, 200, -100)  # Aumentar valores
+    glTexCoord2f(0, 1); glVertex3f(100, 200, -100)
     glEnd()
 
-    # 🔹 Pared 4
+    # 🔹 Pared 4 (Aumenta las dimensiones)
     glBegin(GL_QUADS)
-    glTexCoord2f(0, 0); glVertex3f(-50, 0, -50)
-    glTexCoord2f(1, 0); glVertex3f(-50, 0, 50)
-    glTexCoord2f(1, 1); glVertex3f(-50, 100, 50)
-    glTexCoord2f(0, 1); glVertex3f(-50, 100, -50)
+    glTexCoord2f(0, 0); glVertex3f(-100, 0, -100)
+    glTexCoord2f(1, 0); glVertex3f(-100, 0, 100)  # Aumentar valores
+    glTexCoord2f(1, 1); glVertex3f(-100, 200, 100)  # Aumentar valores
+    glTexCoord2f(0, 1); glVertex3f(-100, 200, -100)
     glEnd()
 
-      # 🔹 Techo
+    # 🔹 Techo (Aumenta las dimensiones)
     glBegin(GL_QUADS)
-    glTexCoord2f(0, 0); glVertex3f(-50, 100, -50)
-    glTexCoord2f(1, 0); glVertex3f(50, 100, -50)
-    glTexCoord2f(1, 1); glVertex3f(50, 100, 50)
-    glTexCoord2f(0, 1); glVertex3f(-50, 100, 50)
+    glTexCoord2f(0, 0); glVertex3f(-100, 200, -100)  # Aumentar valores
+    glTexCoord2f(1, 0); glVertex3f(100, 200, -100)
+    glTexCoord2f(1, 1); glVertex3f(100, 200, 100)  # Aumentar valores
+    glTexCoord2f(0, 1); glVertex3f(-100, 200, 100)
     glEnd()
 
     # 🔹 Aplicar textura diferente al suelo
     glBindTexture(GL_TEXTURE_2D, textura_suelo_id)  # Cambiar textura
     glBegin(GL_QUADS)
-    glTexCoord2f(0, 0); glVertex3f(-50, 0, -50)
-    glTexCoord2f(1, 0); glVertex3f(50, 0, -50)
-    glTexCoord2f(1, 1); glVertex3f(50, 0, 50)
-    glTexCoord2f(0, 1); glVertex3f(-50, 0, 50)
+    glTexCoord2f(0, 0); glVertex3f(-100, 0, -100)  # Aumentar valores
+    glTexCoord2f(1, 0); glVertex3f(100, 0, -100)
+    glTexCoord2f(1, 1); glVertex3f(100, 0, 100)  # Aumentar valores
+    glTexCoord2f(0, 1); glVertex3f(-100, 0, 100)
     glEnd()
 
     glDisable(GL_TEXTURE_2D)  # Desactivar texturas después de pintar

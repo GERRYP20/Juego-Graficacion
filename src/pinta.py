@@ -54,6 +54,8 @@ def pintaEsfera3():
 
 #Inicio Mike
 
+
+
 def pintaEsferaMike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
@@ -466,7 +468,29 @@ def pintaMike5():
     pintaCintasMike(1, 1.8, 6, 0.1, 4)
     glPopMatrix()
 
-
+def pintarsincambiosMike():
+    glRotatef(-90, 1, 0, 0)
+    glRotatef(180, 0, 0, 1)
+    pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
+    pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
+    pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
+    pintaCilindroMike(0, 0, 3, 2, 7)
+    pintaCilindroMike(1, 0, 0.5, 0.3, 2.5)
+    pintaCilindroMike(-1, 0, 0.5, 0.3, 2.5)
+    pintaCaraMike(0, 0, 10, 2, 3.2)
+    pintaZapatosMike(1, 0, 0, 0.6, 1)
+    pintaZapatosMike(-1, 0, 0, 0.6, 1)
+    pintaEsferaMike(0, 0, 12.8, 2.2, 16, 30)
+    pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
+    pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
+    pintaBrazoMike(-5.5, 0, 8.3, 0.6, 3.5)
+    pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
+    pintaCilindro2Mike(0, 2, 8, 0.2, 2)
+    pintaEsfera2Mike(0, 2, 8, 0.5, 15, 50)
+    pintaManosMike(-5.5, 0, 8.3, 0.5, 15, 50)
+    pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
+    pintaCintasMike(-1, 1.8, 6, 0.1, 4)
+    pintaCintasMike(1, 1.8, 6, 0.1, 4)
 #huesos
 
 def pintaHuesos():

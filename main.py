@@ -10,21 +10,13 @@ import Acciones.escenarios as es
 import Acciones.luces as lc
 import src.pinta as pt
 import Acciones.textos as tx
+import colisiones as col
 
- # Variables para la pelota
-pelota_pos = [-50, 5, -10]  # Posición inicial al lado izquierdo del personaje
-pelota_direccion = [1, 0, 0]  # Dirección hacia el personaje
-pelota_velocidad = 2 # Aumenté la velocidad
-pelota_activa = False  # Solo activa cuando presiones 'i'
-radio_pelota = 1.5
-
-
-# Variables para la segunda pelota
-pelota2_pos = [0, 50, 0]  # Empieza arriba
-pelota2_direccion = [0, -1, 0]  # Baja hacia el personaje
-pelota2_velocidad = 1.5
-pelota2_activa = False
-radio_pelota2 = 1.5
+# Estas variables deben declararse en el archivo principal
+pelota_pos = [-20, 2, 0]
+pelota_direccion = [1, 0, 0]
+pelota2_pos = [0, 50, 0]
+pelota2_direccion = [0, -1, 0]
 
 
 def iniciar_juego(personaje):
@@ -33,7 +25,7 @@ def iniciar_juego(personaje):
     es.ultimo_suelo = None
     mostrar_mike = False
     mostrar_huesos = False
-    global pelota_activa
+    global pelota_pos, pelota_direccion, pelota_activa    
     global pelota2_pos, pelota2_direccion, pelota2_activa
     
     velocidad_camara = 0.1
@@ -99,108 +91,8 @@ def iniciar_juego(personaje):
         gluPerspective(45, (display[0] / display[1]), 0.1, 500.0)  # Configura la perspectiva
         glTranslatef(*pos_inicial)  # Restablece la posición inicial
 
-    def mover_pelota():
-        global pelota_pos, pelota_direccion, pelota_activa
-        if pelota_activa:
-            pelota_pos[0] += pelota_direccion[0] * pelota_velocidad
-            pelota_pos[1] += pelota_direccion[1] * pelota_velocidad
-            pelota_pos[2] += pelota_direccion[2] * pelota_velocidad
-
-            # Si colisiona, cambia la dirección
-            if detectar_colision():
-                print("¡Colisión detectada!")  # Para que confirmes que sí detecta
-                pelota_direccion[0] *= -1  # Rebote en X
-                pelota_direccion[2] *= -1  # Rebote en Z (opcional)
-
-            # Si la pelota se aleja mucho, desactívala
-            if abs(pelota_pos[0]) > 100 or abs(pelota_pos[2]) > 100:
-                pelota_activa = False
-                print("Pelota desactivada")
-
-    def mover_pelota2():
-        global pelota2_pos, pelota2_direccion, pelota2_activa
-        if pelota2_activa:
-            pelota2_pos[0] += pelota2_direccion[0] * pelota2_velocidad
-            pelota2_pos[1] += pelota2_direccion[1] * pelota2_velocidad
-            pelota2_pos[2] += pelota2_direccion[2] * pelota2_velocidad
-
-            if detectar_colision2():
-                print("¡Colisión con pelota 2!")
-                pelota2_direccion[1] *= -1  # Rebote hacia arriba
-
-            # Si cae muy abajo, se desactiva
-            if pelota2_pos[1] > 80:
-                pelota2_activa = False
-                print("Pelota 2 desactivada")
-
-    def dibujar_pelota2():
-        glPushMatrix()
-        glTranslatef(*pelota2_pos)
-        glColor3f(0, 0, 1)  # Azul
-        quadric = gluNewQuadric()
-        gluSphere(quadric, radio_pelota2, 20, 20)
-        gluDeleteQuadric(quadric)
-        glPopMatrix()
-
-    def detectar_colision2():
-        distancia = math.sqrt(
-            (pelota2_pos[0] - 0)**2 +
-            (pelota2_pos[1] - 0)**2 +
-            (pelota2_pos[2] - 0)**2
-        )
-        return distancia < (radio_pelota2 + 10)
-
-
-    def dibujar_pelota():
-        glPushMatrix()
-        glTranslatef(*pelota_pos)
-        glColor3f(1, 0, 0)  # Color rojo
-        quadric = gluNewQuadric()
-        gluSphere(quadric, radio_pelota, 20, 20)
-        gluDeleteQuadric(quadric)
-        glPopMatrix()
-
-
-
-    radio_personaje = 1
-
-    def detectar_colision():
-        distancia = math.sqrt(
-            (pelota_pos[0] - 0)**2 +
-            (pelota_pos[1] - 0)**2 +
-            (pelota_pos[2] - 0)**2
-        )
-        return distancia < (radio_pelota + radio_personaje)
-
-    # Funciones para pintar
    
-    def pintarsincambiosMike():
-        glPushMatrix()
-        glRotatef(-90, 1, 0, 0)
-        glRotatef(180, 0, 0, 1)
-        pt.pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
-        pt.pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
-        pt.pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
-        pt.pintaCilindroMike(0, 0, 3, 2, 7)
-        pt.pintaCilindroMike(1, 0, 0.5, 0.3, 2.5)
-        pt.pintaCilindroMike(-1, 0, 0.5, 0.3, 2.5)
-        pt.pintaCaraMike(0, 0, 10, 2, 3.2)
-        pt.pintaZapatosMike(1, 0, 0, 0.6, 1)
-        pt.pintaZapatosMike(-1, 0, 0, 0.6, 1)
-        pt.pintaEsferaMike(0, 0, 12.8, 2.2, 16, 30)
-        pt.pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
-        pt.pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
-        pt.pintaBrazoMike(-5.5, 0, 8.3, 0.6, 3.5)
-        pt.pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
-        pt.pintaCilindro2Mike(0, 2, 8, 0.2, 2)
-        pt.pintaEsfera2Mike(0, 2, 8, 0.5, 15, 50)
-        pt.pintaManosMike(-5.5, 0, 8.3, 0.5, 15, 50)
-        pt.pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
-        pt.pintaCintasMike(-1, 1.8, 6, 0.1, 4)
-        pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
-
-        glPopMatrix()
-
+    # Funciones para pintar
 
     # Elegir personaje según lo seleccionado en el menú
     if personaje == "mapache":
@@ -208,7 +100,7 @@ def iniciar_juego(personaje):
     elif personaje == "huesos":
         personaje_dibujar = pt.pintaHuesos
     elif personaje == "mike":
-        personaje_dibujar = pintarsincambiosMike
+        personaje_dibujar = pt.pintarsincambiosMike
     else:
         personaje_dibujar = pt.pintaMapache
 
@@ -234,11 +126,10 @@ def iniciar_juego(personaje):
                     if personaje == "mapache":
                         personaje_dibujar = pt.pintaMapache
                     elif personaje == "mike":
-                        personaje_dibujar = pintarsincambiosMike
+                        personaje_dibujar = pt.pintarsincambiosMike
                     elif personaje == "huesos":
                         personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/campanas.wav')
-
                 elif event.key == pygame.K_2:
                     escenario_actual = 1
                     suelo_actual = 0
@@ -300,7 +191,7 @@ def iniciar_juego(personaje):
                     if personaje == "mapache":
                         personaje_dibujar = pt.pintaMapacheCaminando
                     elif personaje == "mike":
-                        personaje_dibujar = pintarsincambiosMike
+                        personaje_dibujar = pt.pintarsincambiosMike
                     elif personaje == "huesos":
                         personaje_dibujar = pt.pintaHuesos
                     sd.sonidoOn('Sonidos/mar.wav')
@@ -349,10 +240,6 @@ def iniciar_juego(personaje):
         # Llamar a la función de dibujo del personaje
         personaje_dibujar()                        
 
-        # Mostrar texto solo en el escenario 7
-        if escenario_actual == 6:  # Escenario 7 (índice 6)
-            tx.text("Figura Caminando", 20, 36, 0, 20, 0, 0, 0, 255, 255, 255)
-
         tx.text("Instrucciones:",-25,38,0,20,0,0,0,255,255,255)
         tx.text("Presiona de 1-7 para cambiar de escenario",-25,36,0,20,0,0,0,255,255,255)
         tx.text("Para mover la camara usar: a,s,d,w,z,x",-25,34,0,20,0,0,0,255,255,255)
@@ -362,12 +249,15 @@ def iniciar_juego(personaje):
         tx.text("Colision 2: u",-25,24,0,20,0,0,0,255,255,255)
         tx.text("Salir: ESC",-25,22,0,20,0,0,0,255,255,255)
         tx.text("Graficacion",30,38,0,20,0,0,0,255,255,255)
-        mover_pelota()
+        
+        col.mover_pelota()
         if pelota_activa:
-            dibujar_pelota()
-        mover_pelota2()
+            col.dibujar_pelota()
+
+        col.mover_pelota2()
         if pelota2_activa:
-            dibujar_pelota2()
+            col.dibujar_pelota2()
+
         pygame.display.flip()
         pygame.time.wait(10)
     

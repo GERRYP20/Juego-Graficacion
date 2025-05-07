@@ -8,29 +8,7 @@ import Acciones.escenarios as es
 import Acciones.textos as txt
 
 
-def pintarsincambiosMike():
-    glRotatef(-90, 1, 0, 0)
-    glRotatef(180, 0, 0, 1)
-    pt.pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
-    pt.pintaCejasMike(-1.5, 1.9, 11.9, 0.1, 1)
-    pt.pintaCejasMike(-.5, 2, 10.7, 0.1, 1)
-    pt.pintaCilindroMike(0, 0, 3, 2, 7)
-    pt.pintaCilindroMike(1, 0, 0.5, 0.3, 2.5)
-    pt.pintaCilindroMike(-1, 0, 0.5, 0.3, 2.5)
-    pt.pintaCaraMike(0, 0, 10, 2, 3.2)
-    pt.pintaZapatosMike(1, 0, 0, 0.6, 1)
-    pt.pintaZapatosMike(-1, 0, 0, 0.6, 1)
-    pt.pintaEsferaMike(0, 0, 12.8, 2.2, 16, 30)
-    pt.pintaOjosMike(1, 1.6, 11.5, 0.3, 15, 50)
-    pt.pintaOjosMike(-1, 1.6, 11.5, 0.3, 15, 50)
-    pt.pintaBrazoMike(-5.5, 0, 8.3, 0.6, 3.5)
-    pt.pintaBrazoMike(2, 0, 8.3, 0.6, 3.5)
-    pt.pintaCilindro2Mike(0, 2, 8, 0.2, 2)
-    pt.pintaEsfera2Mike(0, 2, 8, 0.5, 15, 50)
-    pt.pintaManosMike(-5.5, 0, 8.3, 0.5, 15, 50)
-    pt.pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
-    pt.pintaCintasMike(-1, 1.8, 6, 0.1, 4)
-    pt.pintaCintasMike(1, 1.8, 6, 0.1, 4)
+
 
 def draw_base(x_offset, selected):
     base_size = 2.0
@@ -79,7 +57,7 @@ def seleccion_de_personaje():
     character_changed = False
     character_angles = [0, 0, 0]
 
-    personajes = [pt.pintaMapache, pt.pintaHuesos, pintarsincambiosMike]
+    personajes = [pt.pintaMapache, pt.pintaHuesos, pt.pintarsincambiosMike]
     nombres_personajes = ["mapache", "huesos", "mike"]
 
     while True:
