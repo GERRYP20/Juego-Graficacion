@@ -316,6 +316,7 @@ def iniciar_juego(personaje):
                     pelota2_pos = [0, 50, 0]  # Reinicia posición
                     pelota2_direccion = [0, -1, 0]  # Hacia abajo
                 if event.key == pygame.K_m:
+                    sd.sonidoOff()
                     return  # Esto te saca del juego y vuelve al menú
    
         # Movimiento de cámara con teclado
