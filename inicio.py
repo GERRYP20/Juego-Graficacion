@@ -5,8 +5,8 @@ from main import iniciar_juego
 from Acciones.sonidos import *
 
 if __name__ == "__main__":
-    sonidoOn("sonidos/SoteMenu.mp3")
     while True:
+        sonidoOn("sonidos/SoteMenu.mp3")
         accion = mostrar_menu("Imagenes/SoteImage.png")
         if accion == "jugar":
             while True:

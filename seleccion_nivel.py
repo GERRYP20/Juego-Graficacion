@@ -6,6 +6,7 @@ from OpenGL.GLU import *
 from seleccion_personaje import seleccion_de_personaje
 import Acciones.escenarios as es
 import Acciones.textos as txt
+from Acciones.sonidos import *
 
 # Función para dibujar el botón en la parte superior derecha
 def draw_back_button():
@@ -94,6 +95,7 @@ def configurar_opengl():
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
     glClearColor(0.9, 0.9, 0.95, 1.0)
+    sonidoOn("sonidos/SoteMenu.mp3")
 
     glEnable(GL_LIGHTING)
     glEnable(GL_LIGHT0)

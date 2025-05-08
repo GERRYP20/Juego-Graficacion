@@ -8,6 +8,8 @@ import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
 import time
+from Acciones.sonidos import *
+
 
 # Variables globales para la posición del personaje
 posx = 0  # Posición inicial en el eje X
@@ -62,6 +64,7 @@ def iniciar_memorama(personaje):
     # Configuración de la perspectiva
     gluPerspective(45, (display[0] / display[1]), 0.1, 500.0)
     glTranslatef(0, -20, -70)
+    sonidoOn("sonidos/SoteMenu.mp3")
 
     # Determinar la función de dibujo del personaje
     if personaje == "mapache":
@@ -87,10 +90,10 @@ def iniciar_memorama(personaje):
                 teclas_activas.discard(event.key)  # Eliminar la tecla del conjunto
                 # Movimiento del personaje
                 # Movimiento continuo del personaje
-        if pygame.K_w in teclas_activas:  # Adelante
+        '''if pygame.K_w in teclas_activas:  # Adelante
             posz -= velocidad
         if pygame.K_s in teclas_activas:  # Atrás
-            posz += velocidad
+            posz += velocidad'''
         if pygame.K_a in teclas_activas:  # Izquierda
             posx -= velocidad
         if pygame.K_d in teclas_activas:  # Derecha
