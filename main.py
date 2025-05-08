@@ -22,6 +22,29 @@ pelota2_activa = False  # Inicialmente, la pelota no está activa
 
 
 def iniciar_juego(personaje, nivel):
+
+     # Configuración inicial
+    print(f"Iniciando juego con el personaje: {personaje} en el nivel: {nivel}")
+
+    # Configuración específica para cada nivel
+    if nivel == "memorama":
+        print("Configurando nivel: Memorama")
+        from nivel_1 import iniciar_memorama  # Importar la función del nivel 1
+        iniciar_memorama(personaje)  # Llamar a la función del nivel 1
+        return  # Salir de iniciar_juego después de manejar el nivel
+    elif nivel == "tormenta":
+        print("Configurando nivel: Tormenta")
+        # Configura cosas específicas para el nivel "tormenta"
+        escenario_actual = 1
+        suelo_actual = 0
+    elif nivel == "laberinto":
+        print("Configurando nivel: Laberinto")
+        # Configura cosas específicas para el nivel "laberinto"
+        escenario_actual = 2
+        suelo_actual = 1
+
+    # Configuración común para todos los niveles
+    print(f"Escenario inicial: {escenario_actual}, Suelo inicial: {suelo_actual}")
     
     es.ultimo_fondo = None
     es.ultimo_suelo = None

@@ -121,7 +121,7 @@ def seleccion_de_nivel():
     level_angles = [0, 0, 0]
 
     nombres_niveles = ["memorama", "tormenta", "laberinto"]
-    textos_niveles = ["NIVEL 1: MEMORAMA", "NIVEL 2: TORMENTA", "NIVEL 3: LABERINTO"]
+    textos_niveles = ["NIVEL 1: TORMENTA", "NIVEL 2: MEMORAMA", "NIVEL 3: LABERINTO"]
     posiciones = [-12, 0, 12]
     hitboxes = [(pos - 2, pos + 2) for pos in posiciones]
 

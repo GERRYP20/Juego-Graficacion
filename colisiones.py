@@ -1,7 +1,7 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 import math
-
+from OpenGL.GLUT import *
 
 
 # Variables globales (asegúrate de inicializarlas en el archivo principal)
@@ -16,6 +16,67 @@ radio_pelota2 = 1.5
 pelota_activa = True    
 pelota2_activa = True
 
+# Variables globales para las esferas
+esferas_pos = [
+    [-30, 40, 0],  # Esfera 1
+    [-15, 40, 0],   # Esfera 2
+    [0, 40, 0],   # Esfera 3
+    [15, 40, 0],    # Esfera 4
+    [30, 40, 0],      # Esfera 5 (centro)
+]
+esfera_velocidad = 0.8  # Velocidad de caída de las esferas
+esferas_activas = [True, True, True, True, True]  # Estado de las esferas (activas o no)
+radio_esfera = 4  # Radio de las esferas
+radio_cabeza_personaje = 2.0  # Radio de la cabeza del personaje
+
+# Variables globales para las direcciones de las esferas
+esferas_direcciones = [
+    [0, -1, 0],  # Dirección inicial de la esfera 1 (hacia abajo)
+    [0, -1, 0],  # Dirección inicial de la esfera 2
+    [0, -1, 0],  # Dirección inicial de la esfera 3
+    [0, -1, 0],  # Dirección inicial de la esfera 4
+    [0, -1, 0],  # Dirección inicial de la esfera 5
+]
+
+# Función para mover las esferas
+def mover_esferas(posx, posy, posz):
+    global esferas_pos, esferas_activas, esferas_direcciones
+    for i in range(len(esferas_pos)):
+        if esferas_activas[i]:
+            # Mover la esfera en su dirección actual
+            esferas_pos[i][0] += esferas_direcciones[i][0] * esfera_velocidad
+            esferas_pos[i][1] += esferas_direcciones[i][1] * esfera_velocidad
+            esferas_pos[i][2] += esferas_direcciones[i][2] * esfera_velocidad
+
+            # Detectar colisión con la cabeza del personaje
+            if detectar_colision_esfera(esferas_pos[i], posx, posy, posz):
+                print(f"¡Colisión con la cabeza del personaje por la esfera {i + 1}!")
+                # Invertir la dirección de la esfera
+                esferas_direcciones[i][0] *= -1  # Invertir dirección en X
+                esferas_direcciones[i][1] *= -1  # Invertir dirección en Y
+                esferas_direcciones[i][2] *= -1  # Invertir dirección en Z
+
+# Función para dibujar las esferas
+def dibujar_esferas():
+    global esferas_pos, esferas_activas
+    for i in range(len(esferas_pos)):
+        if esferas_activas[i]:
+            glPushMatrix()
+            glTranslatef(esferas_pos[i][0], esferas_pos[i][1], esferas_pos[i][2])
+            glColor3f(0.5, 0.0, 0.5)  # Color morado
+            quad = gluNewQuadric()
+            gluSphere(quad, radio_esfera, 32, 32)  # Dibujar una esfera
+            glPopMatrix()
+
+# Función para detectar colisiones con las esferas
+def detectar_colision_esfera(esfera_pos, posx, posy, posz):
+    # Detectar colisión con la cabeza del personaje
+    distancia = math.sqrt(
+        (esfera_pos[0] - posx) ** 2 +
+        (esfera_pos[1] - (posy + radio_cabeza_personaje)) ** 2 +  # Ajustar para la cabeza
+        (esfera_pos[2] - posz) ** 2
+    )
+    return distancia < (radio_esfera + radio_cabeza_personaje)  # Colisión con la cabeza
 
 def mover_pelota():
     global pelota_pos, pelota_activa
