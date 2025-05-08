@@ -1,14 +1,25 @@
 from mnu import mostrar_menu
 from seleccion_personaje import seleccion_de_personaje
-from main import iniciar_juego 
+from seleccion_nivel import seleccion_de_nivel
+from main import iniciar_juego
 from Acciones.sonidos import *
 
 if __name__ == "__main__":
-    sonidoOn("sonidos/SoteMenu.mp3") 
+    sonidoOn("sonidos/SoteMenu.mp3")
     while True:
         accion = mostrar_menu("Imagenes/SoteImage.png")
         if accion == "jugar":
-            personaje = seleccion_de_personaje()
-            iniciar_juego(personaje)
+            while True:
+                # Seleccionar personaje
+                personaje = seleccion_de_personaje()
+
+                # Seleccionar nivel
+                nivel_elegido = seleccion_de_nivel()
+
+                # Confirmar selección y comenzar el juego
+                print("Personaje seleccionado:", personaje)
+                print("Nivel elegido:", nivel_elegido)
+                iniciar_juego(personaje, nivel_elegido)
+                break  # Salir del bucle interno y regresar al menú principal
         elif accion == "salir":
             break

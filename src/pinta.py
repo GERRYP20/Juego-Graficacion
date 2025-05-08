@@ -469,6 +469,7 @@ def pintaMike5():
     glPopMatrix()
 
 def pintarsincambiosMike():
+    glPushMatrix()
     glRotatef(-90, 1, 0, 0)
     glRotatef(180, 0, 0, 1)
     pintaCejasMike(0.5, 1.9, 11.9, 0.1, 1)
@@ -491,6 +492,7 @@ def pintarsincambiosMike():
     pintaManosMike(5.5, 0, 8.3, 0.5, 15, 50)
     pintaCintasMike(-1, 1.8, 6, 0.1, 4)
     pintaCintasMike(1, 1.8, 6, 0.1, 4)
+    glPopMatrix() 
 #huesos
 
 def pintaHuesos():

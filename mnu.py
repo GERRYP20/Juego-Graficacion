@@ -61,7 +61,7 @@ def mostrar_menu(fondo_path="Menu.jpg"):
                         if i == 0:
                             return "jugar"
                         elif i == 1:
-                            print("Opciones aún no implementadas.")
+                            cred.mostrar_nombres(fondo_path)
                         elif i == 2:
                             pygame.quit()
                             sys.exit()

@@ -13,13 +13,15 @@ import Acciones.textos as tx
 import colisiones as col
 
 # Estas variables deben declararse en el archivo principal
-pelota_pos = [-20, 2, 0]
+pelota_pos = [-200, 2, 0]
 pelota_direccion = [1, 0, 0]
-pelota2_pos = [0, 50, 0]
+pelota2_pos = [0, 100, 0]
 pelota2_direccion = [0, -1, 0]
+pelota_activa = False  # Inicialmente, la pelota no está activa
+pelota2_activa = False  # Inicialmente, la pelota no está activa
 
 
-def iniciar_juego(personaje):
+def iniciar_juego(personaje, nivel):
     
     es.ultimo_fondo = None
     es.ultimo_suelo = None
@@ -200,11 +202,12 @@ def iniciar_juego(personaje):
                     saludando = not saludando  # Alternar el estado de saludo
                 if event.key == pygame.K_i:
                     pelota_activa = True
-                    pelota_pos = [-20, 2, 0]  # <-- Aquí la colocamos al nivel de la cámara
+                    pelota_pos = [-100, 2, 0]  # <-- Aquí la colocamos al nivel de la cámara
                     pelota_direccion = [1, 0, 0]  # Dirección hacia el personaje 
+                    print("Pelota activada:", pelota_activa, "Posición inicial:", pelota_pos)
                 if event.key == pygame.K_u:
                     pelota2_activa = True
-                    pelota2_pos = [0, 50, 0]  # Reinicia posición
+                    pelota2_pos = [0, 100, 0]  # Reinicia posición
                     pelota2_direccion = [0, -1, 0]  # Hacia abajo
                 if event.key == pygame.K_m:
                     return  # Esto te saca del juego y vuelve al menú
@@ -250,13 +253,15 @@ def iniciar_juego(personaje):
         tx.text("Salir: ESC",-25,22,0,20,0,0,0,255,255,255)
         tx.text("Graficacion",30,38,0,20,0,0,0,255,255,255)
         
-        col.mover_pelota()
         if pelota_activa:
             col.dibujar_pelota()
+            col.mover_pelota()
 
-        col.mover_pelota2()
         if pelota2_activa:
             col.dibujar_pelota2()
+            col.mover_pelota2()
+
+        # Detectar colisiones   
 
         pygame.display.flip()
         pygame.time.wait(10)

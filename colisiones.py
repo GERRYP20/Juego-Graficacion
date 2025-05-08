@@ -3,22 +3,38 @@ from OpenGL.GLU import *
 import math
 
 
+
 # Variables globales (asegúrate de inicializarlas en el archivo principal)
-pelota_pos = [-20, 2, 0]
+pelota_pos = [-100, 2, 0]
 pelota_direccion = [1, 0, 0]
-pelota2_pos = [0, 50, 0]
+pelota_velocidad = 2 # Aumenté la velocidad
+pelota2_pos = [0, 100, 0]
 pelota2_direccion = [0, -1, 0]
 radio_personaje = 1
-radio_pelota = 1
-radio_pelota2 = 1
+radio_pelota = 1.5
+radio_pelota2 = 1.5
+pelota_activa = True    
+pelota2_activa = True
+
 
 def mover_pelota():
-    global pelota_pos
-    pelota_pos[0] += pelota_direccion[0]
-    pelota_pos[1] += pelota_direccion[1]
-    pelota_pos[2] += pelota_direccion[2]
-    if pelota_pos[0] > 50:  # Limite derecho
-        pelota_pos[0] = -20  # Reinicia la posición
+    global pelota_pos, pelota_activa
+    if pelota_activa:
+        pelota_pos[0] += pelota_direccion[0] * pelota_velocidad
+        pelota_pos[1] += pelota_direccion[1] * pelota_velocidad
+        pelota_pos[2] += pelota_direccion[2] * pelota_velocidad
+    
+        # Si colisiona, cambia la dirección
+        if detectar_colision():
+            print("¡Colisión detectada!")  # Para que confirmes que sí detecta
+            pelota_direccion[0] *= -1  # Rebote en X
+            pelota_direccion[2] *= -1  # Rebote en Z (opcional)
+
+            # Si la pelota se aleja mucho, desactívala
+        if abs(pelota_pos[0]) > 100 or abs(pelota_pos[2]) > 100:
+            pelota_activa = False
+            print("Pelota1 desactivada")
+
 
 def dibujar_pelota():
     glPushMatrix()
@@ -38,12 +54,19 @@ def detectar_colision():
         return distancia < (radio_pelota + radio_personaje)
 
 def mover_pelota2():
-    global pelota2_pos
-    pelota2_pos[0] += pelota2_direccion[0]
-    pelota2_pos[1] += pelota2_direccion[1]
-    pelota2_pos[2] += pelota2_direccion[2]
-    if pelota2_pos[1] < 0:  # Límite inferior
-        pelota2_pos[1] = 50  # Reinicia la posición
+    global pelota2_pos, pelota2_activa
+    if pelota2_activa:
+        pelota2_pos[0] += pelota2_direccion[0] * pelota_velocidad
+        pelota2_pos[1] += pelota2_direccion[1] * pelota_velocidad
+        pelota2_pos[2] += pelota2_direccion[2] * pelota_velocidad
+        if detectar_colision2():
+            print("¡Colisión con pelota 2!")
+            pelota2_direccion[1] *= -1  # Rebote hacia arriba
+
+        # Si cae muy abajo, se desactiva
+        if pelota2_pos[1] > 100:
+            pelota2_activa = False
+            print("Pelota 2 desactivada")
 
 def dibujar_pelota2():
     glPushMatrix()
