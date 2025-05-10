@@ -117,7 +117,6 @@ def seleccion_de_nivel():
     configurar_opengl()
 
     selected_level = 0
-    level_changed = False
     level_angles = [0, 0, 0]
 
     nombres_niveles = ["memorama", "tormenta", "laberinto"]
@@ -134,21 +133,17 @@ def seleccion_de_nivel():
                 pygame.quit()
                 quit()
             if event.type == KEYDOWN:
-                if event.key == K_LEFT and not level_changed:
+                if event.key == K_LEFT:
                     selected_level = (selected_level - 1) % 3
-                    level_changed = True
-                elif event.key == K_RIGHT and not level_changed:
+                elif event.key == K_RIGHT:
                     selected_level = (selected_level + 1) % 3
-                    level_changed = True
                 elif event.key == K_RETURN:
                     pygame.quit()
                     return nombres_niveles[selected_level]
                 elif event.key == K_ESCAPE:
                     pygame.quit()
                     quit()
-            if event.type == KEYUP:
-                if event.key in (K_LEFT, K_RIGHT):
-                    level_changed = False
+
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 mouse_clicked = True
 

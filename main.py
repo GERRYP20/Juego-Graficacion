@@ -123,8 +123,6 @@ def iniciar_juego(personaje, nivel):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     quit()
-                if event.key == pygame.K_RETURN:
-                    return True
                 if event.key == pygame.K_p:
                     sd.sonidoOn('Sonidos/start.wav')
                 if event.key == pygame.K_o:
@@ -225,6 +223,7 @@ def iniciar_juego(personaje, nivel):
 
         pygame.display.flip()
         pygame.time.wait(10)
+
 
 if __name__ == "__main__":
     iniciar_juego()
