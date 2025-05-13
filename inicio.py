@@ -17,7 +17,6 @@ if __name__ == "__main__":
                 # Seleccionar personaje
                 personaje = seleccion_de_personaje()
                 if iniciar_lobby(personaje)==True:
-                
                     nivel_elegido = seleccion_de_nivel()
                     print("Personaje seleccionado:", personaje)
                     print("Nivel elegido:", nivel_elegido)

@@ -103,7 +103,7 @@ def iniciar_puertas(personaje):
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        es.pinta_escenario("Imagenes/fondo7.jpg", "Imagenes/suelo7.jpg")
+        es.pinta_escenario("Imagenes/ciudad.jpg", "Imagenes/ciudad.jpg")
 
         glPushMatrix()
         glTranslatef(posx, posy, posz)
