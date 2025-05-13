@@ -34,8 +34,9 @@ def iniciar_juego(personaje, nivel):
         suelo_actual = 0
     elif nivel == "laberinto":
         print("Configurando nivel: Laberinto")
-        escenario_actual = 2
-        suelo_actual = 1
+        from nivel_3 import iniciar_puertas
+        iniciar_puertas(personaje)
+        return
     elif nivel == "lobby":
         print("Configurando el lobby")
         escenario_actual = 0
