@@ -25,6 +25,15 @@ pelota2_direccion = [0, -1, 0]  # Baja hacia el personaje
 pelota2_velocidad = 1.5
 pelota2_activa = False
 radio_pelota2 = 1.5
+def resetear_opengl():
+    glDisable(GL_LIGHTING)
+    glDisable(GL_LIGHT0)
+    glDisable(GL_COLOR_MATERIAL)
+    glDisable(GL_DEPTH_TEST)
+    glClearColor(0, 0, 0, 1)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    pygame.display.quit()  # Cierra la ventana y destruye el contexto
+    pygame.quit() 
 
 def configurar_opengl():
     pygame.init()
@@ -221,10 +230,9 @@ def iniciar_lobby(personaje):
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    return True
                 if event.key==pygame.K_RETURN:
-                  return True
+                    resetear_opengl()
+                    return True
                 # Cambiar escenario con teclas 1 al 5
                 if event.key == pygame.K_p:
                     sd.sonidoOn('Sonidos/start.wav')

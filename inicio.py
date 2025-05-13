@@ -16,11 +16,12 @@ if __name__ == "__main__":
             while True:
                 # Seleccionar personaje
                 personaje = seleccion_de_personaje()
-                iniciar_juego(personaje, "lobby")
-                nivel_elegido = seleccion_de_nivel()
-                print("Personaje seleccionado:", personaje)
-                print("Nivel elegido:", nivel_elegido)
-                iniciar_juego(personaje, nivel_elegido)
+                if iniciar_lobby(personaje)==True:
+                
+                    nivel_elegido = seleccion_de_nivel()
+                    print("Personaje seleccionado:", personaje)
+                    print("Nivel elegido:", nivel_elegido)
+                    iniciar_juego(personaje, nivel_elegido)
 
                 break  # Salir del bucle interno y regresar al menú principal
  
