@@ -222,7 +222,7 @@ def iniciar_lobby(personaje):
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    quit()
+                    return True
                 if event.key==pygame.K_RETURN:
                   return True
                 # Cambiar escenario con teclas 1 al 5

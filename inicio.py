@@ -16,6 +16,7 @@ if __name__ == "__main__":
             while True:
                 # Seleccionar personaje
                 personaje = seleccion_de_personaje()
+                iniciar_juego(personaje, "lobby")
                 nivel_elegido = seleccion_de_nivel()
                 print("Personaje seleccionado:", personaje)
                 print("Nivel elegido:", nivel_elegido)
