@@ -75,7 +75,6 @@ def iniciar_puertas(personaje):
         personaje_dibujar = pt.pintaMapache
 
     posiciones_puertas = [-20, 0, 20]
-    nombres_puertas = ["RESPUESTA 1", "RESPUESTA 2", "RESPUESTA 3"]
     z_puerta = -10
 
     mensajes = [
@@ -91,7 +90,24 @@ def iniciar_puertas(personaje):
     temporizador = [
         "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"
     ]
+
+    preguntas = [
+        ("¿Cada cuánto debes cepillarte los dientes?", 
+         ["Una vez al mes", "Dos veces al día", "Solo cuando están sucios"]),
+        ("¿Qué es lo más importante para mantener las manos limpias?", 
+         ["Enjuagarlas con agua", "Lavarlas con agua y jabón", "Secarlas al sol"]),
+        ("¿Por qué es importante bañarse con regularidad?", 
+         ["Para gastar agua", "Para sentirse más alto", "Para eliminar bacterias y olores"]),
+        ("¿Cuál es un buen hábito antes de comer?", 
+         ["Lavar las manos", "Correr", "Ver televisión"]),
+        ("¿Qué debes hacer después de ir al baño?", 
+         ["Lavarte las manos", "Dormir", "Jugar"])
+    ]
+    duracion_pregunta = 15  # segundos por pregunta
+
     tiempo_inicio = time.time()
+    tiempo_pregunta_inicio = None
+    indice_pregunta = 0
 
     while True:
         for event in pygame.event.get():
@@ -123,36 +139,59 @@ def iniciar_puertas(personaje):
         personaje_dibujar()
         glPopMatrix()
 
-        for i, pos in enumerate(posiciones_puertas):
+        for pos in posiciones_puertas:
             glPushMatrix()
             glTranslatef(pos, 0, z_puerta)
             glScalef(2.5, 2.5, 2.5)
             draw_puerta()
             glPopMatrix()
-            tx.text(nombres_puertas[i], pos - 4, 10, z_puerta, 28, 255, 255, 0, 0, 0, 0)
-
-        tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
-        tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
         tiempo_actual = time.time()
         tiempo_transcurrido = tiempo_actual - tiempo_inicio
 
         if tiempo_transcurrido <= tiempo_total_mensajes:
-            indice = int(tiempo_transcurrido // duracion_mensaje)
-            mensaje = mensajes[indice]
+            indice_msg = int(tiempo_transcurrido // duracion_mensaje)
+            mensaje = mensajes[indice_msg]
             tx.text(mensaje, -10, 37, 0, 30, 255, 255, 255, 0, 0, 0)
-        else:
-            # Iniciar temporizador después de los mensajes
+            tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+            tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+
+        elif tiempo_transcurrido <= tiempo_total_mensajes + len(temporizador):
             tiempo_timer = tiempo_transcurrido - tiempo_total_mensajes
             indice_timer = int(tiempo_timer)
             if indice_timer < len(temporizador):
                 tx.text(temporizador[indice_timer], -1, 35, 0, 45, 255, 255, 255, 0, 0, 0)
             else:
                 tx.text("¡Tiempo!", -1, 35, 0, 45, 255, 255, 255, 0, 0, 0)
+            tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+            tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
-            # Aquí ya puedes mover las esferas después del temporizador
-            if indice_timer >= len(temporizador):
-                mover_esferas(posx, posy, posz)
+        else:
+            if tiempo_pregunta_inicio is None:
+                tiempo_pregunta_inicio = tiempo_actual
+
+            pregunta_actual = preguntas[indice_pregunta]
+            texto_pregunta = pregunta_actual[0]
+            respuestas = pregunta_actual[1]
+
+            # Mostrar pregunta arriba
+            tx.text(texto_pregunta, -20, 25, 0, 30, 255, 255, 255, 0, 0, 0)
+            tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+            tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+
+            # Mostrar respuestas arriba de puertas
+            for i, pos in enumerate(posiciones_puertas):
+                tx.text(respuestas[i], pos - len(respuestas[i]) * 0.5, 10, z_puerta, 22, 255, 255, 0, 0, 0, 0)
+
+            # Cambiar pregunta cada duracion_pregunta segundos
+            if tiempo_actual - tiempo_pregunta_inicio > duracion_pregunta:
+                indice_pregunta += 1
+                if indice_pregunta >= len(preguntas):
+                    indice_pregunta = 0
+                tiempo_pregunta_inicio = tiempo_actual
+
+            # Puedes mover esferas o agregar lógica aquí si quieres
+            # mover_esferas(posx, posy, posz)
 
         pygame.display.flip()
         pygame.time.wait(10)
