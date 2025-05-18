@@ -2,8 +2,10 @@ import pygame
 import sys
 import os
 import creditos as cred
+from Acciones.sonidos import *
 def mostrar_menu(fondo_path="Menu.jpg"):
     pygame.init()
+    sonidoOn("sonidos/SoteMenu.mp3")
     pantalla = pygame.display.set_mode((800, 600))
     pygame.display.set_caption("Menú Arcade")
     

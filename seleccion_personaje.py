@@ -6,9 +6,17 @@ from OpenGL.GLU import *
 import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as txt
+from Acciones.sonidos import *
 
-
-
+def resetear_opengl():
+    glDisable(GL_LIGHTING)
+    glDisable(GL_LIGHT0)
+    glDisable(GL_COLOR_MATERIAL)
+    glDisable(GL_DEPTH_TEST)
+    glClearColor(0, 0, 0, 1)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    pygame.display.quit()  # Cierra la ventana y destruye el contexto
+    pygame.quit() 
 
 def draw_base(x_offset, selected):
     base_size = 2.0
@@ -73,9 +81,12 @@ def seleccion_de_personaje():
                     selected_character = (selected_character + 1) % 3
                     character_changed = True
                 elif event.key == K_RETURN:
+                    sonidoOff()
+                    resetear_opengl() 
                     pygame.quit()
                     return nombres_personajes[selected_character]
-                elif event.key == K_ESCAPE:  
+                elif event.key == K_ESCAPE: 
+                    resetear_opengl() 
                     pygame.quit()  
                     quit()    
 

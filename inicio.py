@@ -7,7 +7,6 @@ from Acciones.sonidos import *
 import pygame
 
 if __name__ == "__main__":
-    sonidoOn("sonidos/SoteMenu.mp3")
 
     while True:
         accion = mostrar_menu("Imagenes/SoteImage.png")

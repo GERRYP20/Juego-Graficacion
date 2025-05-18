@@ -6,7 +6,21 @@ from OpenGL.GLU import *
 from seleccion_personaje import seleccion_de_personaje
 import Acciones.escenarios as es
 import Acciones.textos as txt
+import Acciones.objetos as ob
+import src.pinta as pt
+from Acciones.sonidos import *
 
+def draw_pintamicrofono():
+                glRotatef(-45, 1, 0, 0)
+                pt.pinta_figuras_micro(
+                    x_cil=0, y_cil=0, z_cil=-1,
+                    r_cilindro=0.6, altura_cilindro=4, lados_cilindro=40,
+                    x_esp=0, y_esp=0, z_esp=3.5,
+                    r_esfera=1.0, slices_esfera=20, segmentos_esfera=30)
+                
+def draw_pino():
+     glRotatef(-80, 1, 0, 0)
+     pt.pinta_pino(x=0, y=0, z=0, radio_tronco=0.3, altura_tronco=2, radio_rama=1, altura_rama=1.5, segmentos=30)
 # Función para dibujar el botón en la parte superior derecha
 def draw_back_button():
     button_width = 150
@@ -84,6 +98,7 @@ def draw_puerta():
     glVertex3f(-1, 4, 0.8)
     glEnd()
 
+
 def configurar_opengl():
     pygame.init()
     pygame.mixer.init()
@@ -113,15 +128,19 @@ def configurar_opengl():
     pygame.event.set_grab(True)
     pygame.mouse.set_visible(True)
 
+figuras_nivel = [draw_pino,draw_puerta, draw_pintamicrofono]
+
 def seleccion_de_nivel():
     configurar_opengl()
-
+    sonidoOn("sonidos/Nivel.mp3")
     selected_level = 0
     level_angles = [0, 0, 0]
 
     nombres_niveles = ["memorama", "tormenta", "laberinto"]
     textos_niveles = ["NIVEL 1: TORMENTA", "NIVEL 2: MEMORAMA", "NIVEL 3: LABERINTO"]
+    textos_lugares= ["EL BOSQUE DE KEVIN", "RUINAS DE HUESOS", "CIUDAD MIKE"]
     posiciones = [-12, 0, 12]
+    posiciones2 = [-12, 0, 12]
     hitboxes = [(pos - 2, pos + 2) for pos in posiciones]
 
     while True:
@@ -167,7 +186,7 @@ def seleccion_de_nivel():
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         es.pinta_escenario2("Imagenes/SoteImage.png", "Imagenes/pisoSote.png")
-        txt.text("¡SELECCIONA UN NIVEL!", -17, 12, -18, 50, 255, 255, 255, 0, 0, 255)
+        txt.text("¡SELECCIONA UN NIVEL!", -12, 12, -18, 50, 255, 255, 0, 0, 0, 0)
 
         for i in range(3):
             draw_base(posiciones[i], selected_level == i)
@@ -178,11 +197,12 @@ def seleccion_de_nivel():
             glTranslatef(posiciones[i], 0, 0)
             glRotatef(level_angles[i], 0, 1, 0)
             glScalef(1.5, 1.5, 1.5)
-            draw_puerta()
+            figuras_nivel[i]()  # ← Llama la figura correspondiente al nivel
             glPopMatrix()
 
             # Mostrar texto del nivel frente a la puerta
             txt.text(textos_niveles[i], posiciones[i] - 3, -3, 2, 25, 255, 255, 0, 0, 0, 0)
+            txt.text(textos_lugares[i], posiciones2[i] - 3, 7, 0, 25, 255, 255, 0, 0, 0, 0)
 
         # Dibujar el botón "Volver"
         draw_back_button()

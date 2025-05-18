@@ -8,13 +8,14 @@ import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
 import time
-
+from Acciones.sonidos import *
 # Variables globales para la posición del personaje
 posx = 0  # Posición inicial en el eje X
 posy = 0  # Posición inicial en el eje Y
 posz = 0  # Posición inicial en el eje Z
 
 def iniciar_memorama(personaje):
+    
     es.ultimo_fondo = None
     es.ultimo_suelo = None
     # Variables globales para las esferas
@@ -46,7 +47,7 @@ def iniciar_memorama(personaje):
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
-
+    sonidoOn("sonidos/nivel 1.mp3")
     # Configuración de OpenGL
     glEnable(GL_LIGHTING)
     glEnable(GL_LIGHT0)
@@ -77,20 +78,22 @@ def iniciar_memorama(personaje):
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                sonidoOff()  # Detener el sonido al salir
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    sonidoOff()
                     return  # Salir del nivel y regresar al menú principal
                 teclas_activas.add(event.key)  # Agregar la tecla al conjunto
             if event.type == pygame.KEYUP:
                 teclas_activas.discard(event.key)  # Eliminar la tecla del conjunto
                 # Movimiento del personaje
                 # Movimiento continuo del personaje
-        if pygame.K_w in teclas_activas:  # Adelante
-            posz -= velocidad
-        if pygame.K_s in teclas_activas:  # Atrás
-            posz += velocidad
+        ##if pygame.K_w in teclas_activas:  # Adelante
+            ##posz -= velocidad
+        ##if pygame.K_s in teclas_activas:  # Atrás
+            ##posz += velocidad
         if pygame.K_a in teclas_activas:  # Izquierda
             posx -= velocidad
         if pygame.K_d in teclas_activas:  # Derecha
@@ -107,7 +110,7 @@ def iniciar_memorama(personaje):
         #glTranslatef(0, 0, -50)  # Ajustar la posición de la cámara
 
         # Dibujar el fondo, suelo y personaje
-        es.pinta_escenario("Imagenes/fondo7.jpg", "Imagenes/suelo7.jpg")  # Fondo y suelo del nivel
+        es.pinta_escenario("Imagenes/fondo2.jpg", "Imagenes/suelo1.jpg")  # Fondo y suelo del nivel
         glPushMatrix()
         glTranslatef(posx, posy, posz)  # Posicionar al personaje
         personaje_dibujar()  # Dibujar el personaje seleccionado

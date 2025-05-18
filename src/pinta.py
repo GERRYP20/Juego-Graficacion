@@ -1755,4 +1755,79 @@ def pintaCubo():
     obj.cubo()
     glPopMatrix()
 
+def pintaCilindromicro(x, y, z, r, a):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.colorNegroPlano()
+    obj.cilindro(r, a, 40)
+    glPopMatrix()
 
+def pintaEsferamicro(x, y, z, r, sl, seg):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.colorBlancoPlano()
+    obj.esfera(r, sl, seg)
+    glPopMatrix()
+
+def pinta_figuras_micro(
+    x_cil, y_cil, z_cil,
+    r_cilindro, altura_cilindro, lados_cilindro,
+    x_esp, y_esp, z_esp,
+    r_esfera, slices_esfera, segmentos_esfera
+):
+
+    glPushMatrix()
+    glTranslatef(x_cil, y_cil, z_cil)
+    lc.iluminacion(0.0, 0.0, 0.0)
+    cl.colorNegroPlano()
+    obj.cilindro(r_cilindro, altura_cilindro, lados_cilindro)
+    glPopMatrix()
+
+    # Pintar la esfera
+    glPushMatrix()
+    glTranslatef(x_esp, y_esp, z_esp)
+    lc.iluminacion(0.0, 0.0, 0.0)
+    cl.colorBlancoPlano()
+    obj.esfera(r_esfera, slices_esfera, segmentos_esfera)
+    glPopMatrix()
+
+def pintaCubo(x, y, z, lado):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    lc.iluminacion(0.0, 0.0, 0.0)  
+    cl.colorGris()
+    obj.cubo(lado)
+    glPopMatrix()
+
+def pinta_pino(x, y, z, radio_tronco, altura_tronco, radio_rama, altura_rama, segmentos):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    
+    # Dibuja el tronco (cilindro)
+    glColor3f(0.55, 0.27, 0.07)  # Marrón para el tronco
+    obj.cilindro(radio_tronco, altura_tronco, segmentos)
+    
+    # Dibuja las ramas (3 conos)
+    glColor3f(0.0, 0.5, 0.0)  # Verde para las ramas
+    
+    # Rama inferior
+    glPushMatrix()
+    glTranslatef(0, 0, altura_tronco)  # base del primer cono encima del tronco
+    obj.cono(radio_rama, altura_rama, segmentos)
+    glPopMatrix()
+    
+    # Rama media
+    glPushMatrix()
+    glTranslatef(0, 0, altura_tronco + altura_rama * 0.7)
+    obj.cono(radio_rama * 0.8, altura_rama * 0.8, segmentos)
+    glPopMatrix()
+    
+    # Rama superior
+    glPushMatrix()
+    glTranslatef(0, 0, altura_tronco + altura_rama * 1.3)
+    obj.cono(radio_rama * 0.6, altura_rama * 0.6, segmentos)
+    glPopMatrix()
+    
+    glPopMatrix()
