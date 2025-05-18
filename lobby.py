@@ -38,6 +38,7 @@ def resetear_opengl():
 def configurar_opengl():
     pygame.init()
     pygame.mixer.init()
+    sd.sonidoOn("Sonidos/lobby.mp3")
     glutInit()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 
@@ -235,7 +236,7 @@ def iniciar_lobby(personaje):
                     return True
                 # Cambiar escenario con teclas 1 al 5
                 if event.key == pygame.K_p:
-                    sd.sonidoOn('Sonidos/start.wav')
+                    sd.sonidoOn('Sonidos/lobby.mp3')
                 if event.key == pygame.K_o:
                     sd.sonidoOff()
                 if event.key == pygame.K_c:
@@ -366,14 +367,14 @@ def iniciar_lobby(personaje):
             tx.text("Figura Caminando", 20, 36, 0, 20, 0, 0, 0, 255, 255, 255)
 
         tx.text("Instrucciones:",-25,38,0,20,0,0,0,255,255,255)
-        tx.text("Presiona de 1-7 para cambiar de escenario",-25,36,0,20,0,0,0,255,255,255)
-        tx.text("Para mover la camara usar: a,s,d,w,z,x",-25,34,0,20,0,0,0,255,255,255)
-        tx.text("Camara en posicion original: c",-25,32,0,20,0,0,0,255,255,255)
-        tx.text("Encender sonido general: p",-25,30,0,20,0,0,0,255,255,255)
-        tx.text("Colision 1: i",-25,26,0,20,0,0,0,255,255,255)
-        tx.text("Colision 2: u",-25,24,0,20,0,0,0,255,255,255)
-        tx.text("Salir: ESC",-25,22,0,20,0,0,0,255,255,255)
-        tx.text("Graficacion",30,38,0,20,0,0,0,255,255,255)
+        tx.text("Presiona de 1-7 para cambiar de escenario",-10.5,16,6,30,0,0,0,255,255,255)
+        tx.text("Para mover la camara usar: a,s,d,w,z,x",-10.5,15,6,30,0,0,0,255,255,255)
+        tx.text("Encender sonido general: p",-10.5,14,6,30,0,0,0,255,255,255)
+        tx.text("Salir: ESC",-10.5,13,6,30,0,0,0,255,255,255)
+        tx.text("GRAFICACIÓN",5,14,6,30,0,0,0,255,255,255)
+        tx.text("Presiona i para lanzar la pelota", -11, 12, 6, 30, 0, 0, 0, 255, 255, 255)
+        tx.text("Presiona u para lanzar la pelota", -11, 11, 6, 30, 0, 0, 0, 255, 255, 255)
+        tx.text("PRESIONA ENTER PARA CONTINUAR", -8.5, 2, 6, 40, 0, 0, 0, 255, 255, 255)
         mover_pelota()
         if pelota_activa:
             dibujar_pelota()

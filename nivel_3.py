@@ -8,7 +8,7 @@ import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
 import time
-
+from Acciones.sonidos import *
 # Posición inicial del personaje
 posx = 0
 posy = 0
@@ -47,6 +47,7 @@ def iniciar_puertas(personaje):
     pygame.init()
     pygame.mixer.init()
     glutInit()
+    sonidoOn("sonidos/nivel3.mp3")
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
@@ -84,6 +85,7 @@ def iniciar_puertas(personaje):
                 quit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
+                    sonidoOff()
                     return
                 teclas_activas.add(event.key)
             if event.type == KEYUP:
@@ -103,7 +105,7 @@ def iniciar_puertas(personaje):
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        es.pinta_escenario("Imagenes/ciudad.jpg", "Imagenes/ciudad.jpg")
+        es.pinta_escenario("Imagenes/ciudad.jpg", "Imagenes/piso3.jpg")
 
         glPushMatrix()
         glTranslatef(posx, posy, posz)

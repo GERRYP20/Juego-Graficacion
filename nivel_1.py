@@ -121,7 +121,7 @@ def iniciar_memorama(personaje):
 
         # Mostrar texto en pantalla
         tx.text("¡Bienvenido a la Tormenta de Decisiones!", -1, 46, 0, 30, 255, 255, 255, 0, 0, 0)
-        tx.text("Presiona ESC para regresar", -1, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+        tx.text("Presiona ESC para regresar al menú", -1, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
         pygame.display.flip()
         pygame.time.wait(10)

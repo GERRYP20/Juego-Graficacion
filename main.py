@@ -29,20 +29,15 @@ def iniciar_juego(personaje, nivel):
         iniciar_memorama(personaje)
         return
     elif nivel == "tormenta":
-        print("Configurando nivel: Tormenta")
-        escenario_actual = 1
-        suelo_actual = 0
+        print("Configurando nivel: Memorama_real")
+        from nivel_2 import iniciar_ruinas
+        iniciar_ruinas(personaje)
+        return
     elif nivel == "laberinto":
         print("Configurando nivel: Laberinto")
         from nivel_3 import iniciar_puertas
         iniciar_puertas(personaje)
         return
-    elif nivel == "lobby":
-        print("Configurando el lobby")
-        escenario_actual = 0
-        suelo_actual = 0
-
-    print(f"Escenario inicial: {escenario_actual}, Suelo inicial: {suelo_actual}")
 
     es.ultimo_fondo = None
     es.ultimo_suelo = None
