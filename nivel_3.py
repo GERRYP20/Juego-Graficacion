@@ -1,4 +1,4 @@
-from OpenGL.GL import *
+from OpenGL.GL import * 
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import pygame
@@ -9,6 +9,7 @@ import Acciones.escenarios as es
 import Acciones.textos as tx
 import time
 from Acciones.sonidos import *
+
 # Posición inicial del personaje
 posx = 0
 posy = 0
@@ -42,7 +43,6 @@ def iniciar_puertas(personaje):
     global posx, posy, posz
     velocidad = 1.0
     teclas_activas = set()
-    inicio_tiempo = time.time()
 
     pygame.init()
     pygame.mixer.init()
@@ -76,7 +76,22 @@ def iniciar_puertas(personaje):
 
     posiciones_puertas = [-20, 0, 20]
     nombres_puertas = ["RESPUESTA 1", "RESPUESTA 2", "RESPUESTA 3"]
-    z_puerta = -10  # Alejar puertas
+    z_puerta = -10
+
+    mensajes = [
+        "Primera decisión importante...",
+        "Evalúa bien tus opciones.",
+        "Elige la puerta correcta.",
+        "Tienes 10 segundos para decidir.",
+        "¡Buena suerte!"
+    ]
+    duracion_mensaje = 3  # segundos por mensaje
+    tiempo_total_mensajes = len(mensajes) * duracion_mensaje
+
+    temporizador = [
+        "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"
+    ]
+    tiempo_inicio = time.time()
 
     while True:
         for event in pygame.event.get():
@@ -100,11 +115,7 @@ def iniciar_puertas(personaje):
         if K_d in teclas_activas:
             posx += velocidad
 
-        if time.time() - inicio_tiempo > 10:
-            mover_esferas(posx, posy, posz)
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
         es.pinta_escenario("Imagenes/ciudad.jpg", "Imagenes/piso3.jpg")
 
         glPushMatrix()
@@ -112,27 +123,36 @@ def iniciar_puertas(personaje):
         personaje_dibujar()
         glPopMatrix()
 
-        # Dibujar puertas
         for i, pos in enumerate(posiciones_puertas):
             glPushMatrix()
             glTranslatef(pos, 0, z_puerta)
             glScalef(2.5, 2.5, 2.5)
             draw_puerta()
             glPopMatrix()
+            tx.text(nombres_puertas[i], pos - 4, 10, z_puerta, 28, 255, 255, 0, 0, 0, 0)
 
-            # Texto sobre la puerta (centrado y elevado)
-            tx.text(
-                nombres_puertas[i],
-                pos - 4,        # x
-                10,             # y
-                z_puerta,       # z
-                28,             # tamaño
-                255, 255, 0,    # color
-                0, 0, 0         # fondo
-            )
-
-        tx.text("¡Bienvenido al laberinto de Decisiones!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+        tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
         tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+
+        tiempo_actual = time.time()
+        tiempo_transcurrido = tiempo_actual - tiempo_inicio
+
+        if tiempo_transcurrido <= tiempo_total_mensajes:
+            indice = int(tiempo_transcurrido // duracion_mensaje)
+            mensaje = mensajes[indice]
+            tx.text(mensaje, -10, 37, 0, 30, 255, 255, 255, 0, 0, 0)
+        else:
+            # Iniciar temporizador después de los mensajes
+            tiempo_timer = tiempo_transcurrido - tiempo_total_mensajes
+            indice_timer = int(tiempo_timer)
+            if indice_timer < len(temporizador):
+                tx.text(temporizador[indice_timer], -1, 35, 0, 45, 255, 255, 255, 0, 0, 0)
+            else:
+                tx.text("¡Tiempo!", -1, 35, 0, 45, 255, 255, 255, 0, 0, 0)
+
+            # Aquí ya puedes mover las esferas después del temporizador
+            if indice_timer >= len(temporizador):
+                mover_esferas(posx, posy, posz)
 
         pygame.display.flip()
         pygame.time.wait(10)

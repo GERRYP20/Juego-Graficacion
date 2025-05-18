@@ -31,6 +31,8 @@ def draw_base(x_offset, selected):
 def configurar_opengl():
     pygame.init()
     pygame.mixer.init()
+    sonidoOff()
+    sonidoOn("sonidos/seleccion.mp3")
     glutInit()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 

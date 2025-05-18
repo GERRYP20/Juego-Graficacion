@@ -48,7 +48,7 @@ def draw_back_button():
 
     # Desactivar el búfer de profundidad para dibujar el texto sobre el botón
     glDisable(GL_DEPTH_TEST)
-    txt.text("Volver", x + 25, y + 10, 0, 20, 255, 255, 255, 0, 0, 0)
+    txt.text("Volver", x + 25, y + 30, 0, 40, 255, 255, 255, 0, 0, 0)
     glEnable(GL_DEPTH_TEST)  # Reactivar el búfer de profundidad
 
     # Restaurar proyección
