@@ -9,18 +9,25 @@ import Acciones.textos as txt
 from Acciones.sonidos import *
 
 def resetear_opengl():
+    # Limpia estados OpenGL para no afectar otros módulos
+    glBindTexture(GL_TEXTURE_2D, 0)
+    glDisable(GL_TEXTURE_2D)
     glDisable(GL_LIGHTING)
     glDisable(GL_LIGHT0)
     glDisable(GL_COLOR_MATERIAL)
     glDisable(GL_DEPTH_TEST)
     glClearColor(0, 0, 0, 1)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    pygame.display.quit()  # Cierra la ventana y destruye el contexto
-    pygame.quit() 
+    # Cierra ventana y libera pygame y OpenGL
+    pygame.display.quit()
+    pygame.quit()
 
 def draw_base(x_offset, selected):
     base_size = 2.0
-    glColor3f(1, 1, 0) if selected else glColor3f(0.5, 0.5, 0.5)
+    if selected:
+        glColor3f(1, 1, 0)
+    else:
+        glColor3f(0.5, 0.5, 0.5)
     glBegin(GL_QUADS)
     glVertex3f(x_offset - base_size, -2, base_size)
     glVertex3f(x_offset + base_size, -2, base_size)
@@ -55,7 +62,6 @@ def configurar_opengl():
 
     glTranslatef(0, -7, -30)
     glRotatef(15, 1, 0, 0)
-    
 
     pygame.event.set_grab(True)
     pygame.mouse.set_visible(True)
@@ -70,38 +76,37 @@ def seleccion_de_personaje():
     personajes = [pt.pintaMapache, pt.pintaHuesos, pt.pintarsincambiosMike]
     nombres_personajes = ["mapache", "huesos", "mike"]
 
-    while True:
-        for event in pygame.event.get():    
+    running = True
+    while running:
+        for event in pygame.event.get():
             if event.type == QUIT:
-                pygame.quit()
-                quit()
-            if event.type == KEYDOWN:
+                running = False
+            elif event.type == KEYDOWN:
                 if event.key == K_LEFT and not character_changed:
-                    selected_character = (selected_character - 1) % 3
+                    selected_character = (selected_character - 1) % len(personajes)
                     character_changed = True
                 elif event.key == K_RIGHT and not character_changed:
-                    selected_character = (selected_character + 1) % 3
+                    selected_character = (selected_character + 1) % len(personajes)
                     character_changed = True
                 elif event.key == K_RETURN:
                     sonidoOff()
-                    resetear_opengl() 
-                    pygame.quit()
+                    resetear_opengl()
                     return nombres_personajes[selected_character]
-                elif event.key == K_ESCAPE: 
-                    resetear_opengl() 
-                    pygame.quit()  
-                    quit()    
-
-            if event.type == KEYUP:
+                elif event.key == K_ESCAPE:
+                    resetear_opengl()
+                    running = False
+            elif event.type == KEYUP:
                 if event.key in (K_LEFT, K_RIGHT):
                     character_changed = False
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         es.pinta_escenario2("Imagenes/SoteImage.png", "Imagenes/pisoSote.png")
+
         txt.text("¡SELECCIONA TU PERSONAJE!", -17, 12, -18, 50, 255, 255, 255, 0, 0, 255)
         txt.text("HUESOS", -1.5, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
         txt.text("GATOPACHE KEVIN", -11, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
         txt.text("RAPERO MIKEE", 7, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
+
         posiciones = [-12, 0, 12]
 
         for i, personaje in enumerate(personajes):
@@ -109,7 +114,7 @@ def seleccion_de_personaje():
             glPushMatrix()
             glTranslatef(posiciones[i], 0, 0)
             if selected_character == i:
-                character_angles[i] += 15
+                character_angles[i] = (character_angles[i] + 15) % 360
             glRotatef(character_angles[i], 0, 1, 0)
             glScalef(0.5, 0.5, 0.5)
             personaje()
@@ -117,3 +122,7 @@ def seleccion_de_personaje():
 
         pygame.display.flip()
         pygame.time.wait(10)
+
+    # Si salimos del loop sin seleccionar, limpiamos y cerramos
+    resetear_opengl()
+    return None

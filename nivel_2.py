@@ -3,54 +3,117 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import pygame
 from pygame.locals import *
-from colisiones import mover_esferas, dibujar_esferas, esferas_pos, esferas_activas, esferas_direcciones
+import random
+import time
 import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
-import time
 from Acciones.sonidos import *
-# Posición inicial del personaje
-posx = 0
-posy = 0
-posz = 0
 
-def draw_puerta():
-    glColor3f(0.6, 0.3, 0.0)  # Color madera
+# --- Variables globales ---
+posx, posy, posz = 0, 0, 0
+cartas = []
+seleccionadas = []
+textura_poker = None  # textura para la parte trasera de las cartas
+
+def cargar_textura(ruta):
+    surface = pygame.image.load(ruta)
+    data = pygame.image.tostring(surface, "RGBA", 1)
+    width = surface.get_width()
+    height = surface.get_height()
+    texture_id = glGenTextures(1)
+    glBindTexture(GL_TEXTURE_2D, texture_id)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    return texture_id
+
+def generar_cartas():
+    global cartas
+    imagenes = ["cepillo.jpg", "jabon.jpg", "banio.png", "manos.jpg", "peine.jpg"] * 2
+    random.shuffle(imagenes)
+    cartas.clear()
+
+    for i, img in enumerate(imagenes):
+        textura_id = cargar_textura("imagenes/" + img)
+        y_pos = 0 if i < 5 else 24  # Mayor separación vertical
+        x_pos = -40 + (i % 5) * 22  # Mayor separación horizontal
+        cartas.append({
+            "id": i,
+            "textura": img,
+            "textura_id": textura_id,
+            "descubierta": False,
+            "pos": (x_pos, y_pos, -30)
+        })
+
+def liberar_texturas():
+    global cartas, textura_poker
+    for carta in cartas:
+        glDeleteTextures([carta["textura_id"]])
+    if textura_poker:
+        glDeleteTextures([textura_poker])
+    cartas.clear()
+
+def dibujar_carta(carta):
+    glPushMatrix()
+    x, y, z = carta["pos"]
+    glTranslatef(x, y, z)
+
+    glEnable(GL_TEXTURE_2D)
+    glBindTexture(GL_TEXTURE_2D, 0)  # ← Limpia textura previa
+
+    ancho = 9
+    alto = 18
+
+    # Determinar qué textura aplicar (frontal si descubierta, trasera si no)
+    if carta["descubierta"]:
+        glBindTexture(GL_TEXTURE_2D, carta["textura_id"])
+    else:
+        glBindTexture(GL_TEXTURE_2D, textura_poker)
+
+    # Cara visible de la carta
     glBegin(GL_QUADS)
-    glVertex3f(-1, 0, 1)
-    glVertex3f(1, 0, 1)
-    glVertex3f(1, 4, 1)
-    glVertex3f(-1, 4, 1)
+    glTexCoord2f(0, 0); glVertex3f(-ancho, 0, 0)
+    glTexCoord2f(1, 0); glVertex3f(ancho, 0, 0)
+    glTexCoord2f(1, 1); glVertex3f(ancho, alto, 0)
+    glTexCoord2f(0, 1); glVertex3f(-ancho, alto, 0)
     glEnd()
 
-    glColor3f(0.3, 0.15, 0.0)
-    glBegin(GL_QUADS)
-    glVertex3f(-1, 4, 1)
-    glVertex3f(1, 4, 1)
-    glVertex3f(1, 4, 0.8)
-    glVertex3f(-1, 4, 0.8)
-    glEnd()
+    glBindTexture(GL_TEXTURE_2D, 0)  # ← Limpieza por si acaso
+    glDisable(GL_TEXTURE_2D)
+    glPopMatrix()
+
+def detectar_carta_click(mouse_x, mouse_y):
+    viewport = glGetIntegerv(GL_VIEWPORT)
+    modelview = glGetDoublev(GL_MODELVIEW_MATRIX)
+    projection = glGetDoublev(GL_PROJECTION_MATRIX)
+
+    real_y = viewport[3] - mouse_y
+    z = glReadPixels(mouse_x, real_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT)
+    if z is None or z == 1.0:
+        return None
+    wx, wy, wz = gluUnProject(mouse_x, real_y, z, modelview, projection, viewport)
+
+    for carta in cartas:
+        x, y, z_pos = carta["pos"]
+        if (x - 9 <= wx <= x + 9) and (y <= wy <= y + 18) and (abs(wz - z_pos) < 5):
+            return carta
+    return None
 
 def iniciar_ruinas(personaje):
+    global posx, posy, posz, textura_poker, seleccionadas
+
     es.ultimo_fondo = None
     es.ultimo_suelo = None
-
-    esferas_pos[:] = [[-30, 40, 0], [-15, 40, 0], [0, 40, 0], [15, 40, 0], [30, 40, 0]]
-    esferas_activas[:] = [True] * 5
-    esferas_direcciones[:] = [[0, -1, 0]] * 5
-
-    global posx, posy, posz
-    velocidad = 1.0
-    teclas_activas = set()
-    inicio_tiempo = time.time()
 
     pygame.init()
     pygame.mixer.init()
     glutInit()
     sonidoOn("sonidos/huesos_soundtrack.mp3")
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 
     glEnable(GL_LIGHTING)
     glEnable(GL_LIGHT0)
@@ -74,18 +137,43 @@ def iniciar_ruinas(personaje):
     else:
         personaje_dibujar = pt.pintaMapache
 
+    textura_poker = cargar_textura("imagenes/poker.png")
+    generar_cartas()
+    seleccionadas.clear()
+
+    reloj = pygame.time.Clock()
+    teclas_activas = set()
+    velocidad = 1.0
+    inicio_tiempo = time.time()
+
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
+                liberar_texturas()
                 pygame.quit()
                 quit()
-            if event.type == KEYDOWN:
+            elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
+                    liberar_texturas()
                     sonidoOff()
                     return
                 teclas_activas.add(event.key)
-            if event.type == KEYUP:
+            elif event.type == KEYUP:
                 teclas_activas.discard(event.key)
+            elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+                mx, my = pygame.mouse.get_pos()
+                carta_seleccionada = detectar_carta_click(mx, my)
+                if carta_seleccionada and not carta_seleccionada["descubierta"]:
+                    carta_seleccionada["descubierta"] = True
+                    seleccionadas.append(carta_seleccionada)
+                    if len(seleccionadas) == 2:
+                        pygame.time.wait(500)
+                        if seleccionadas[0]["textura"] == seleccionadas[1]["textura"]:
+                            pass
+                        else:
+                            for c in seleccionadas:
+                                c["descubierta"] = False
+                        seleccionadas.clear()
 
         if K_w in teclas_activas:
             posz -= velocidad
@@ -96,23 +184,22 @@ def iniciar_ruinas(personaje):
         if K_d in teclas_activas:
             posx += velocidad
 
-        if time.time() - inicio_tiempo > 10:
-            mover_esferas(posx, posy, posz)
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         es.pinta_escenario("Imagenes/hueso type.png", "Imagenes/suelo3.jpg")
-
+        glBindTexture(GL_TEXTURE_2D, 0)
+        glDisable(GL_TEXTURE_2D)
         glPushMatrix()
         glTranslatef(posx, posy, posz)
         personaje_dibujar()
         glPopMatrix()
 
-        # Dibujar puertas
+        for carta in cartas:
+            dibujar_carta(carta)
 
-
-        tx.text("¡Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+        tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
         tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
         pygame.display.flip()
-        pygame.time.wait(10)
+        reloj.tick(60)

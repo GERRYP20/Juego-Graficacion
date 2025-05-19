@@ -579,7 +579,7 @@ def pintaMapache():
     glTranslatef(posx+1 , posy + 3, posz)  # Lado derecho
     glRotatef(45, 1, 0, 0)  # Hacia afuera
     glRotatef(40, 0, 1, 0)  # Ajustar inclinación
-    glRotatef(angulo_brazo, 0, 1, 0)
+    ##glRotatef(angulo_brazo, 0, 1, 0)
     cl.colorGris()
     obj.cilindro(0.5, 4, 20)  # radio, altura, segmentos
     glPopMatrix()
@@ -656,12 +656,7 @@ def pintaMapache():
     glPopMatrix()
 
     # 🔹 Base de la boca (Esfera achatada blanca)
-    glPushMatrix()
-    glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
-    glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
-    cl.colorBlancoPlano()  # Color blanco para la base
-    obj.esfera(0.7, 30, 30)  # Esfera base de la boca
-    glPopMatrix()
+
 
     # 🔹 Parte superior de la boca (Esfera achatada negra)
     glPushMatrix()
@@ -669,6 +664,13 @@ def pintaMapache():
     glScalef(1.0, 0.8, 0.8)  # Más achatada en Y para dar efecto de sombra
     cl.colorNegroPlano()  # Color negro para la parte superior
     obj.esfera(0.3, 30, 30)  # Esfera superior
+    glPopMatrix()
+    
+    glPushMatrix()
+    glTranslatef(posx, posy + 4.2, posz + 1)  # Justo debajo de los ojos
+    glScalef(1.2, 0.8, 1.0)  # Aplastar la esfera en el eje Y
+    cl.colorBlancoPlano()  # Color blanco para la base
+    obj.esfera(0.7, 30, 30)  # Esfera base de la boca
     glPopMatrix()
 
 def pintaMapacheEnojado():
