@@ -25,6 +25,7 @@ pelota2_direccion = [0, -1, 0]  # Baja hacia el personaje
 pelota2_velocidad = 1.5
 pelota2_activa = False
 radio_pelota2 = 1.5
+
 def resetear_opengl():
     glDisable(GL_LIGHTING)
     glDisable(GL_LIGHT0)

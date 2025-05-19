@@ -3,12 +3,7 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from pygame.locals import *
-import math
 import tkinter.messagebox as messagebox
-import Acciones.sonidos as sd
-import Acciones.escenarios as es
-import Acciones.luces as lc
-import src.pinta as pt
 import Acciones.textos as tx
 import colisiones as col
 

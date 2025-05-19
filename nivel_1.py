@@ -14,6 +14,9 @@ from Acciones.sonidos import *
 posx = 0
 posy = 0
 posz = 0
+resultado = None
+resultado_tiempo = 0
+mostrar_resultado = False
 
 def reiniciar_esferas():
     esferas_pos[:] = [
@@ -38,7 +41,7 @@ def iniciar_memorama(personaje):
 
     reiniciar_esferas()
 
-    global posx, posy, posz
+    global posx, posy, posz, resultado, resultado_tiempo, mostrar_resultado
     velocidad = 1.0
     teclas_activas = set()
     inicio_tiempo = time.time()
@@ -84,9 +87,9 @@ def iniciar_memorama(personaje):
 
     opciones_preguntas = [
         [
-            "1. Cepillarse los dientes",
-            "2. Comer dulces diario",
-            "3. No usar hilo dental",
+            "1. Comer dulces diario",
+            "2. No usar hilo dental",
+            "3. Cepillarse los dientes",
             "4. Dormir con la boca abierta",
             "5. Evitar ir al dentista"
         ],
@@ -105,18 +108,18 @@ def iniciar_memorama(personaje):
             "5. Nunca"
         ],
         [
-            "1. Lavarse con agua y jabón",
-            "2. Solo enjuagarse con agua",
+            "1. Solo enjuagarse con agua",
+            "2. Lavarse con agua y jabón",
             "3. Usar solo alcohol en gel",
             "4. No lavarse las manos",
             "5. Usar guantes todo el tiempo"
         ],
         [
-            "1. Lavarlo regularmente",
-            "2. No lavarlo nunca",
-            "3. Usar productos dañinos",
-            "4. Dejarlo sucio",
-            "5. Peinarlo con las manos sucias"
+            "1. No lavarlo nunca",
+            "2. Usar productos dañinos",
+            "3. Dejarlo sucio",
+            "4. Peinarlo con las manos sucias",
+            "5. Lavarlo regularmente"
         ],
         [
             "1. Para evitar enfermedades",
@@ -127,7 +130,7 @@ def iniciar_memorama(personaje):
         ]
     ]
 
-    tiempo_preguntas = [10, 30,50,70,90,110]  # segundos en que aparece cada pregunta
+    tiempo_preguntas = [10, 30, 50, 70, 90, 110]
     pregunta_mostrada = -1
 
     while True:
@@ -151,33 +154,46 @@ def iniciar_memorama(personaje):
 
         tiempo_actual = time.time() - inicio_tiempo
 
-        # Determinar qué pregunta mostrar según el tiempo
         pregunta_actual = pregunta_mostrada
         for i, t in enumerate(tiempo_preguntas):
             if tiempo_actual > t:
                 pregunta_actual = i
 
-        # Si cambia la pregunta, reiniciar esferas
         if pregunta_actual != pregunta_mostrada:
             reiniciar_esferas()
 
         pregunta_mostrada = pregunta_actual
 
-        # Mover esferas después de 20 segundos para la primera pregunta,
-        # y después de 40 segundos para la segunda (20 segundos tras inicio de la pregunta)
         if pregunta_mostrada == 0 and tiempo_actual > 20:
-            mover_esferas(posx, posy, posz)
+            resultado = mover_esferas(posx, posy, posz, 2)
+            if resultado == "correcta":
+                resultado_tiempo = time.time()
+                mostrar_resultado = True
         elif pregunta_mostrada == 1 and tiempo_actual > 40:
-            mover_esferas(posx, posy, posz)
+            resultado = mover_esferas(posx, posy, posz, 0)
+            if resultado == "correcta":
+                resultado_tiempo = time.time()
+                mostrar_resultado = True
         elif pregunta_mostrada == 2 and tiempo_actual > 60:
-            mover_esferas(posx, posy, posz)
+            resultado = mover_esferas(posx, posy, posz, 0)
+            if resultado == "correcta":
+                resultado_tiempo = time.time()
+                mostrar_resultado = True
         elif pregunta_mostrada == 3 and tiempo_actual > 80:
-            mover_esferas(posx, posy, posz)
+            resultado = mover_esferas(posx, posy, posz, 1)
+            if resultado == "correcta":
+                resultado_tiempo = time.time()
+                mostrar_resultado = True
         elif pregunta_mostrada == 4 and tiempo_actual > 100:
-            mover_esferas(posx, posy, posz)
+            resultado = mover_esferas(posx, posy, posz, 4)
+            if resultado == "correcta":
+                resultado_tiempo = time.time()
+                mostrar_resultado = True
         elif pregunta_mostrada == 5 and tiempo_actual > 120:
-            mover_esferas(posx, posy, posz) 
-        
+            resultado = mover_esferas(posx, posy, posz, 0)
+            if resultado == "correcta":
+                resultado_tiempo = time.time()
+                mostrar_resultado = True
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -187,7 +203,6 @@ def iniciar_memorama(personaje):
         personaje_dibujar()
         glPopMatrix()
 
-        # Mostrar pregunta y opciones solo si ya toca mostrarlas
         if pregunta_mostrada >= 0:
             dibujar_esferas()
             for i, (x, y, z) in enumerate(esferas_pos):
@@ -196,8 +211,14 @@ def iniciar_memorama(personaje):
 
             tx.text(preguntas[pregunta_mostrada], -37, 20, 0, 24, 255, 255, 0, 0, 0, 0)
 
+        if mostrar_resultado:
+            if time.time() - resultado_tiempo < 5:
+                tx.text("¡CORRECTO!", -3, 0, 0, 30, 255, 255, 255, 0, 0, 0)
+            else:
+                mostrar_resultado = False
+
         tx.text("¡Bienvenido a la Tormenta de Decisiones!", -17, 30, 0, 30, 255, 255, 255, 0, 0, 0)
         tx.text("Presiona ESC para regresar al menú", -13, 25, 0, 20, 255, 255, 255, 0, 0, 0)
 
         pygame.display.flip()
-        pygame.time.wait(10)
+        pygame.time.wait(10)    

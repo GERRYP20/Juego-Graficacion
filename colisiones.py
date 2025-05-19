@@ -39,22 +39,30 @@ esferas_direcciones = [
 ]
 
 # Función para mover las esferas
-def mover_esferas(posx, posy, posz):
+def mover_esferas(posx, posy, posz, indice):
     global esferas_pos, esferas_activas, esferas_direcciones
+
     for i in range(len(esferas_pos)):
         if esferas_activas[i]:
-            # Mover la esfera en su dirección actual
             esferas_pos[i][0] += esferas_direcciones[i][0] * esfera_velocidad
             esferas_pos[i][1] += esferas_direcciones[i][1] * esfera_velocidad
             esferas_pos[i][2] += esferas_direcciones[i][2] * esfera_velocidad
 
-            # Detectar colisión con la cabeza del personaje
             if detectar_colision_esfera(esferas_pos[i], posx, posy, posz):
-                print(f"¡Colisión con la cabeza del personaje por la esfera {i + 1}!")
-                # Invertir la dirección de la esfera
-                esferas_direcciones[i][0] *= -1  # Invertir dirección en X
-                esferas_direcciones[i][1] *= -1  # Invertir dirección en Y
-                esferas_direcciones[i][2] *= -1  # Invertir dirección en Z
+                if i == indice:
+                    print(f"✅ ¡Respuesta correcta! Colisión con la esfera {i + 1}")
+                    resultado = "correcta"
+                else:
+                    print(f"❌ Respuesta incorrecta. Colisión con la esfera {i + 1}")
+                    resultado = "incorrecta"
+
+                esferas_direcciones[i][0] *= -1
+                esferas_direcciones[i][1] *= -1
+                esferas_direcciones[i][2] *= -1
+
+                return resultado
+
+    return None
 
 # Función para dibujar las esferas
 def dibujar_esferas():
