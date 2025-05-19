@@ -36,8 +36,8 @@ def generar_cartas():
 
     for i, img in enumerate(imagenes):
         textura_id = cargar_textura("imagenes/" + img)
-        y_pos = 0 if i < 5 else 24  # Mayor separación vertical
-        x_pos = -40 + (i % 5) * 22  # Mayor separación horizontal
+        y_pos = 0 if i < 5 else 24
+        x_pos = -40 + (i % 5) * 22
         cartas.append({
             "id": i,
             "textura": img,
@@ -60,18 +60,16 @@ def dibujar_carta(carta):
     glTranslatef(x, y, z)
 
     glEnable(GL_TEXTURE_2D)
-    glBindTexture(GL_TEXTURE_2D, 0)  # ← Limpia textura previa
+    glBindTexture(GL_TEXTURE_2D, 0)
 
     ancho = 9
     alto = 18
 
-    # Determinar qué textura aplicar (frontal si descubierta, trasera si no)
     if carta["descubierta"]:
         glBindTexture(GL_TEXTURE_2D, carta["textura_id"])
     else:
         glBindTexture(GL_TEXTURE_2D, textura_poker)
 
-    # Cara visible de la carta
     glBegin(GL_QUADS)
     glTexCoord2f(0, 0); glVertex3f(-ancho, 0, 0)
     glTexCoord2f(1, 0); glVertex3f(ancho, 0, 0)
@@ -79,7 +77,7 @@ def dibujar_carta(carta):
     glTexCoord2f(0, 1); glVertex3f(-ancho, alto, 0)
     glEnd()
 
-    glBindTexture(GL_TEXTURE_2D, 0)  # ← Limpieza por si acaso
+    glBindTexture(GL_TEXTURE_2D, 0)
     glDisable(GL_TEXTURE_2D)
     glPopMatrix()
 
@@ -166,10 +164,27 @@ def iniciar_ruinas(personaje):
                 if carta_seleccionada and not carta_seleccionada["descubierta"]:
                     carta_seleccionada["descubierta"] = True
                     seleccionadas.append(carta_seleccionada)
+
                     if len(seleccionadas) == 2:
-                        pygame.time.wait(500)
+                        # Redibujar para mostrar ambas cartas
+                        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+                        es.pinta_escenario("Imagenes/hueso type.png", "Imagenes/suelo3.jpg")
+                        glBindTexture(GL_TEXTURE_2D, 0)
+                        glDisable(GL_TEXTURE_2D)
+                        glPushMatrix()
+                        glTranslatef(posx, posy, posz)
+                        personaje_dibujar()
+                        glPopMatrix()
+                        for carta in cartas:
+                            dibujar_carta(carta)
+                        tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+                        tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+                        pygame.display.flip()
+
+                        pygame.time.wait(800)
+
                         if seleccionadas[0]["textura"] == seleccionadas[1]["textura"]:
-                            pass
+                            pass  # Se quedan descubiertas
                         else:
                             for c in seleccionadas:
                                 c["descubierta"] = False
@@ -183,7 +198,6 @@ def iniciar_ruinas(personaje):
             posx -= velocidad
         if K_d in teclas_activas:
             posx += velocidad
-
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
