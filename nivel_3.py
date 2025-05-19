@@ -3,7 +3,7 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import pygame
 from pygame.locals import *
-from colisiones import mover_esferas, dibujar_esferas, esferas_pos, esferas_activas, esferas_direcciones
+from colisiones import detectar_colision_puertas, esferas_pos, esferas_activas, esferas_direcciones
 import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
@@ -33,6 +33,8 @@ def draw_puerta():
     glEnd()
 
 def iniciar_puertas(personaje):
+    global posx, posy, posz
+
     es.ultimo_fondo = None
     es.ultimo_suelo = None
 
@@ -40,7 +42,7 @@ def iniciar_puertas(personaje):
     esferas_activas[:] = [True] * 5
     esferas_direcciones[:] = [[0, -1, 0]] * 5
 
-    global posx, posy, posz
+    posx, posy, posz = 0, 0, 0
     velocidad = 1.0
     teclas_activas = set()
 
@@ -84,30 +86,29 @@ def iniciar_puertas(personaje):
         "Tienes 10 segundos para decidir.",
         "¡Buena suerte!"
     ]
-    duracion_mensaje = 3  # segundos por mensaje
+    duracion_mensaje = 3
     tiempo_total_mensajes = len(mensajes) * duracion_mensaje
 
-    temporizador = [
-        "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"
-    ]
+    temporizador = ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
 
     preguntas = [
         ("¿Cada cuánto debes cepillarte los dientes?", 
-         ["Una vez al mes", "Dos veces al día", "Solo cuando están sucios"]),
+         ["Una vez al mes", "Dos veces al día", "Solo cuando están sucios"], 1),
         ("¿Qué es lo más importante para mantener las manos limpias?", 
-         ["Enjuagarlas con agua", "Lavarlas con agua y jabón", "Secarlas al sol"]),
+         ["Enjuagarlas con agua", "Lavarlas con agua y jabón", "Secarlas al sol"], 1),
         ("¿Por qué es importante bañarse con regularidad?", 
-         ["Para gastar agua", "Para sentirse más alto", "Para eliminar bacterias y olores"]),
+         ["Para gastar agua", "Para sentirse más alto", "Para eliminar bacterias y olores"], 2),
         ("¿Cuál es un buen hábito antes de comer?", 
-         ["Lavar las manos", "Correr", "Ver televisión"]),
+         ["Lavar las manos", "Correr", "Ver televisión"], 0),
         ("¿Qué debes hacer después de ir al baño?", 
-         ["Lavarte las manos", "Dormir", "Jugar"])
+         ["Lavarte las manos", "Dormir", "Jugar"], 0)
     ]
-    duracion_pregunta = 15  # segundos por pregunta
 
+    duracion_pregunta = 15
     tiempo_inicio = time.time()
     tiempo_pregunta_inicio = None
     indice_pregunta = 0
+    avanzar_pregunta = False
 
     while True:
         for event in pygame.event.get():
@@ -174,24 +175,34 @@ def iniciar_puertas(personaje):
             texto_pregunta = pregunta_actual[0]
             respuestas = pregunta_actual[1]
 
-            # Mostrar pregunta arriba
             tx.text(texto_pregunta, -20, 25, 0, 30, 255, 255, 255, 0, 0, 0)
             tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
             tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
-            # Mostrar respuestas arriba de puertas
             for i, pos in enumerate(posiciones_puertas):
                 tx.text(respuestas[i], pos - len(respuestas[i]) * 0.5, 10, z_puerta, 22, 255, 255, 0, 0, 0, 0)
 
-            # Cambiar pregunta cada duracion_pregunta segundos
             if tiempo_actual - tiempo_pregunta_inicio > duracion_pregunta:
-                indice_pregunta += 1
-                if indice_pregunta >= len(preguntas):
-                    indice_pregunta = 0
-                tiempo_pregunta_inicio = tiempo_actual
+                avanzar_pregunta = True
 
-            # Puedes mover esferas o agregar lógica aquí si quieres
-            # mover_esferas(posx, posy, posz)
+            resultado = detectar_colision_puertas(posx, posz, posiciones_puertas, preguntas[indice_pregunta][2], z_puerta=z_puerta)
+            if resultado == "correcta":
+                print("¡Respuesta correcta! Pasando a la siguiente pregunta.")
+                avanzar_pregunta = True
+                posx, posy, posz = 0, 0, 20
+            elif resultado == "incorrecta":
+                print("Intenta otra puerta.")
+                posx, posy, posz = 0, 0, 20
+
+        if avanzar_pregunta:
+            indice_pregunta += 1
+            if indice_pregunta >= len(preguntas):
+                print("¡Has completado todas las preguntas!")
+                sonidoOff()
+                return
+            tiempo_pregunta_inicio = time.time()
+            avanzar_pregunta = False
 
         pygame.display.flip()
         pygame.time.wait(10)
+
