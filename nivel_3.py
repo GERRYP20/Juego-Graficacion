@@ -142,7 +142,7 @@ def iniciar_puertas(personaje):
         for pos in posiciones_puertas:
             glPushMatrix()
             glTranslatef(pos, 0, z_puerta)
-            glScalef(2.5, 2.5, 2.5)
+            glScalef(5.0, 5.0, 5.0)
             draw_puerta()
             glPopMatrix()
 
@@ -175,13 +175,13 @@ def iniciar_puertas(personaje):
             respuestas = pregunta_actual[1]
 
             # Mostrar pregunta arriba
-            tx.text(texto_pregunta, -20, 25, 0, 30, 255, 255, 255, 0, 0, 0)
+            tx.text(texto_pregunta, -20, 32, 0, 30, 255, 255, 255, 0, 0, 0)
             tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
             tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
             # Mostrar respuestas arriba de puertas
             for i, pos in enumerate(posiciones_puertas):
-                tx.text(respuestas[i], pos - len(respuestas[i]) * 0.5, 10, z_puerta, 22, 255, 255, 0, 0, 0, 0)
+                tx.text(respuestas[i], pos - len(respuestas[i]) * 0.5, 28, z_puerta, 22, 255, 255, 0, 0, 0, 0)
 
             # Cambiar pregunta cada duracion_pregunta segundos
             if tiempo_actual - tiempo_pregunta_inicio > duracion_pregunta:

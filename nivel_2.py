@@ -14,7 +14,7 @@ from Acciones.sonidos import *
 posx, posy, posz = 0, 0, 0
 cartas = []
 seleccionadas = []
-textura_poker = None  # textura para la parte trasera de las cartas
+textura_poker = "imagenes/poker.png" # textura para la parte trasera de las cartas
 
 def cargar_textura(ruta):
     surface = pygame.image.load(ruta)
@@ -143,6 +143,7 @@ def iniciar_ruinas(personaje):
     teclas_activas = set()
     velocidad = 1.0
     inicio_tiempo = time.time()
+    tiempo_terminado = False
 
     while True:
         for event in pygame.event.get():
@@ -158,7 +159,7 @@ def iniciar_ruinas(personaje):
                 teclas_activas.add(event.key)
             elif event.type == KEYUP:
                 teclas_activas.discard(event.key)
-            elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+            elif event.type == MOUSEBUTTONDOWN and event.button == 1 and not tiempo_terminado:
                 mx, my = pygame.mouse.get_pos()
                 carta_seleccionada = detectar_carta_click(mx, my)
                 if carta_seleccionada and not carta_seleccionada["descubierta"]:
@@ -166,7 +167,6 @@ def iniciar_ruinas(personaje):
                     seleccionadas.append(carta_seleccionada)
 
                     if len(seleccionadas) == 2:
-                        # Redibujar para mostrar ambas cartas
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
                         es.pinta_escenario("Imagenes/hueso type.png", "Imagenes/suelo3.jpg")
                         glBindTexture(GL_TEXTURE_2D, 0)
@@ -184,20 +184,21 @@ def iniciar_ruinas(personaje):
                         pygame.time.wait(800)
 
                         if seleccionadas[0]["textura"] == seleccionadas[1]["textura"]:
-                            pass  # Se quedan descubiertas
+                            pass
                         else:
                             for c in seleccionadas:
                                 c["descubierta"] = False
                         seleccionadas.clear()
 
-        if K_w in teclas_activas:
-            posz -= velocidad
-        if K_s in teclas_activas:
-            posz += velocidad
-        if K_a in teclas_activas:
-            posx -= velocidad
-        if K_d in teclas_activas:
-            posx += velocidad
+        if not tiempo_terminado:
+            if K_w in teclas_activas:
+                posz -= velocidad
+            if K_s in teclas_activas:
+                posz += velocidad
+            if K_a in teclas_activas:
+                posx -= velocidad
+            if K_d in teclas_activas:
+                posx += velocidad
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -214,6 +215,13 @@ def iniciar_ruinas(personaje):
 
         tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
         tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+
+        tiempo_actual = time.time()
+        if not tiempo_terminado and tiempo_actual - inicio_tiempo > 20:
+            tiempo_terminado = True
+
+        if tiempo_terminado:
+            tx.text("Tiempo terminado!", -10, 37, 0, 30, 255, 0, 0, 0, 0, 0)
 
         pygame.display.flip()
         reloj.tick(60)
