@@ -142,6 +142,8 @@ def iniciar_memorama(personaje):
     tiempo_preguntas = [10, 30, 50, 70, 90, 110]
     pregunta_mostrada = -1
 
+   # ...existing code...
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -161,13 +163,7 @@ def iniciar_memorama(personaje):
         if pygame.K_d in teclas_activas:
             posx += velocidad
 
-      # Verificar si han pasado 10 segundos
-        if time.time() - inicio_tiempo > 10:
-            mover_esferas(posx, posy, posz)  # Mover las esferas después de 10 segundos
-        # Dibujar la escena
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        # Limita el movimiento del personaje en X
-        posx = max(-36, min(36, posx))  # Cambia  según el rango visible del juego
+        posx = max(-36, min(36, posx))
 
         tiempo_actual = time.time() - inicio_tiempo
 
@@ -178,49 +174,35 @@ def iniciar_memorama(personaje):
 
         if pregunta_actual != pregunta_mostrada:
             reiniciar_esferas()
+            resultado = None  # <-- Limpia el resultado al cambiar de pregunta
 
         pregunta_mostrada = pregunta_actual
 
-        if pregunta_mostrada == 0 and tiempo_actual > 20:
-            resultado = mover_esferas(posx, posy, posz, 2)
-        elif pregunta_mostrada == 1 and tiempo_actual > 40:
-            resultado = mover_esferas(posx, posy, posz, 0)
-        elif pregunta_mostrada == 2 and tiempo_actual > 60:
-            resultado = mover_esferas(posx, posy, posz, 0)
-        elif pregunta_mostrada == 3 and tiempo_actual > 80:
-            resultado = mover_esferas(posx, posy, posz, 1)
-        elif pregunta_mostrada == 4 and tiempo_actual > 100:
-            resultado = mover_esferas(posx, posy, posz, 4)
-        elif pregunta_mostrada == 5 and tiempo_actual > 120:
-            resultado = mover_esferas(posx, posy, posz, 0)
-
-        if resultado == "correcta":
-            resultado_tiempo = time.time()
-            mostrar_resultado = True
-        elif resultado is not None:
-            resultado_incorrecto_tiempo = time.time()
-            mostrar_resultado_incorrecto = True
+        # Solo procesa resultado si el juego no ha terminado
+        if not juego_terminado:
+            # Lógica para mover esferas y obtener resultado solo si hay pregunta activa
+            if 0 <= pregunta_mostrada < len(preguntas):
+                resultado = mover_esferas(posx, posy, posz, 0)
+                if resultado == "correcta":
+                    resultado_tiempo = time.time()
+                    mostrar_resultado = True
+                    puntuacion += 1
+                    if pregunta_mostrada == len(preguntas) - 1:
+                        juego_terminado = True
+                elif resultado is not None:
+                    resultado_incorrecto_tiempo = time.time()
+                    mostrar_resultado_incorrecto = True
+                    if pregunta_mostrada == len(preguntas) - 1:
+                        juego_terminado = True
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         es.pinta_escenario("Imagenes/fondo6.jpg", "Imagenes/suelo1.jpg")
-
-        # Configurar la cámara
-        #glLoadIdentity()
-        #glTranslatef(0, 0, -50)  # Ajustar la posición de la cámara
 
         glPushMatrix()
         glTranslatef(posx, posy, posz)
         personaje_dibujar()
         glPopMatrix()
 
-         # Dibujar las esferas
-        dibujar_esferas()
-
-        # Mostrar texto en pantalla
-        tx.text("¡Bienvenido a la Tormenta de Decisiones!", -1, 46, 0, 30, 255, 255, 255, 0, 0, 0)
-        tx.text("Presiona ESC para regresar", -1, 44, 0, 20, 255, 255, 255, 0, 0, 0)
-     
-        # TEXTO DE INSTRUCCIÓN (debajo)
         tx.text("Presiona ESC para regresar al men\u00fa", -28, 0, 18, 20, 255, 255, 255, 0, 0, 0)
 
         if juego_terminado:
@@ -238,7 +220,6 @@ def iniciar_memorama(personaje):
                 if esferas_activas[i]:
                     tx.text(opciones_preguntas[pregunta_mostrada][i], x - 6, y + 5, z, 18, 255, 255, 255, 0, 0, 0)
 
-
         if mostrar_resultado:
             if time.time() - resultado_tiempo < 5:
                 tx.text("\u00a1CORRECTO!", -4, 0, 10, 30, 0, 255, 0, 0, 0, 0)
@@ -250,18 +231,6 @@ def iniciar_memorama(personaje):
                 tx.text("\u00a1INCORRECTO!", -7, 0, 10, 30, 255, 0, 0, 0, 0, 0)
             else:
                 mostrar_resultado_incorrecto = False
-
-        if resultado == "correcta":
-            resultado_tiempo = time.time()
-            mostrar_resultado = True
-            puntuacion += 1
-        elif resultado is not None:
-            resultado_incorrecto_tiempo = time.time()
-            mostrar_resultado_incorrecto = True
-
-        # --- AGREGA ESTO ---
-        if pregunta_mostrada == len(preguntas) - 1 and resultado is not None:
-            juego_terminado = True
 
         pygame.display.flip()
         pygame.time.wait(10)
