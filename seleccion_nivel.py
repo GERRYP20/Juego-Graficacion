@@ -7,6 +7,10 @@ from seleccion_personaje import seleccion_de_personaje
 import Acciones.escenarios as es
 import Acciones.textos as txt
 from Acciones.sonidos import *
+import pygame.time
+
+
+
 
 # Función para dibujar el botón en la parte superior derecha
 def draw_back_button():
@@ -66,6 +70,7 @@ def draw_base(x_offset, selected):
     glVertex3f(x_offset - base_size, -2, -base_size)
     glEnd()
 
+<<<<<<< Updated upstream
 def draw_puerta():
     glColor3f(0.6, 0.3, 0.0)  # Color madera
     glBegin(GL_QUADS)
@@ -74,8 +79,44 @@ def draw_puerta():
     glVertex3f(1, 0, 1)
     glVertex3f(1, 4, 1)
     glVertex3f(-1, 4, 1)
+=======
+def draw_volver_button(selected=False):
+    # Guarda el estado actual de color
+    glPushAttrib(GL_CURRENT_BIT)
+     # Coordenadas para la esquina superior derecha (ajusta según tu cámara)
+    x1, y1 = 12, 16   # esquina inferior izquierda del botón
+    x2, y2 = 17, 17.2  # esquina superior derecha del botón
+    z = -10  # Profundidad del botón
+    # Fondo
+    if selected:
+        glColor3f(0, 1, 1)
+    else:
+        glColor3f(0, 0.12, 0.24)
+    glBegin(GL_QUADS)
+    glVertex3f(x1, y1, z)
+    glVertex3f(x2, y1, z)
+    glVertex3f(x2, y2, z)
+    glVertex3f(x1, y2, z)
+>>>>>>> Stashed changes
     glEnd()
+    # Borde
+    if selected:
+        glColor3f(0, 1, 1)
+    else:
+        glColor3f(1, 0, 1)
+    glLineWidth(3)
+    glBegin(GL_LINE_LOOP)
+    glVertex3f(x1, y1, z)
+    glVertex3f(x2, y1, z)
+    glVertex3f(x2, y2, z)
+    glVertex3f(x1, y2, z)
+    glEnd()
+    # Texto
+    txt.text("VOLVER", x1+.1, y1+0.1, z+0.5, 34, 255,255,255,0,0,0)
+    # Restaura el color anterior
+    glPopAttrib()
 
+<<<<<<< Updated upstream
     # Borde superior
     glColor3f(0.3, 0.15, 0.0)
     glBegin(GL_QUADS)
@@ -84,6 +125,15 @@ def draw_puerta():
     glVertex3f(1, 4, 0.8)
     glVertex3f(-1, 4, 0.8)
     glEnd()
+=======
+def mouse_sobre_volver(mouse_x, mouse_y, ancho=800, alto=600):
+    # Ajusta estos valores para que coincidan con el área visual del botón
+    btn_left = int(ancho * 0.75)      # 600
+    btn_top = int(alto * 0.03)        # 18
+    btn_width = int(ancho * 0.22)     # 176
+    btn_height = int(alto * 0.10)     # 60
+    return btn_left <= mouse_x <= btn_left + btn_width and btn_top <= mouse_y <= btn_top + btn_height
+>>>>>>> Stashed changes
 
 def configurar_opengl():
     pygame.init()
@@ -125,7 +175,17 @@ def seleccion_de_nivel():
     nombres_niveles = ["memorama", "tormenta", "laberinto"]
     textos_niveles = ["NIVEL 1: TORMENTA", "NIVEL 2: MEMORAMA", "NIVEL 3: LABERINTO"]
     posiciones = [-12, 0, 12]
-    hitboxes = [(pos - 2, pos + 2) for pos in posiciones]
+    # Ajusta estos valores para que coincidan con la posición de las bases en pantalla
+    base_hitboxes = [
+        pygame.Rect(100, 400, 180, 120),  # Izquierda
+        pygame.Rect(310, 400, 180, 120),  # Centro
+        pygame.Rect(520, 400, 180, 120),  # Derecha
+]
+    seleccionando_volver = False
+
+    last_click_time = 0
+    last_clicked_index = None
+    DOUBLE_CLICK_TIME = 400  # milisegundos
 
     while True:
         mouse_clicked = False
@@ -136,6 +196,7 @@ def seleccion_de_nivel():
                 pygame.quit()
                 quit()
             if event.type == KEYDOWN:
+<<<<<<< Updated upstream
                 if event.key == K_LEFT and not level_changed:
                     selected_level = (selected_level - 1) % 3
                     level_changed = True
@@ -146,14 +207,54 @@ def seleccion_de_nivel():
                     pygame.quit()
                     return nombres_niveles[selected_level]
                 elif event.key == K_ESCAPE:
+=======
+                if not seleccionando_volver:
+                    if event.key == K_LEFT:
+                        selected_level = (selected_level - 1) % 3
+                    elif event.key == K_RIGHT:
+                        selected_level = (selected_level + 1) % 3
+                    elif event.key == K_UP:
+                        seleccionando_volver = True
+                    elif event.key == K_RETURN:
+                        sonidoOff()
+                        pygame.quit()
+                        return nombres_niveles[selected_level]
+                else:
+                    if event.key == K_DOWN:
+                        seleccionando_volver = False
+                    elif event.key == K_RETURN:
+                        sonidoOff()
+                        return None  # Volver al menú principal
+                if event.key == K_ESCAPE:
+>>>>>>> Stashed changes
                     pygame.quit()
                     quit()
             if event.type == KEYUP:
                 if event.key in (K_LEFT, K_RIGHT):
                     level_changed = False
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                if mouse_sobre_volver(mx, my):
+                    sonidoOff()
+                    return None  # Esto regresa al menú principal
+                for i, rect in enumerate(base_hitboxes):
+                    if rect.collidepoint(mx, my):
+                        now = pygame.time.get_ticks()
+                        if last_clicked_index == i and (now - last_click_time) < DOUBLE_CLICK_TIME:
+                            # Doble clic detectado
+                            selected_level = i
+                            seleccionando_volver = False
+                            sonidoOff()
+                            pygame.quit()
+                            return nombres_niveles[selected_level]
+                        else:
+                            # Primer clic: solo selecciona visualmente
+                            selected_level = i
+                            seleccionando_volver = False
+                            last_clicked_index = i
+                            last_click_time = now
                 mouse_clicked = True
 
+<<<<<<< Updated upstream
         # Verificar si se hizo clic en el botón "Volver"
         if is_back_button_clicked(mx, my) and mouse_clicked:
             pygame.quit()
@@ -171,6 +272,8 @@ def seleccion_de_nivel():
                     pygame.quit()
                     return nombres_niveles[i]
                 selected_level = i
+=======
+>>>>>>> Stashed changes
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         es.pinta_escenario2("Imagenes/SoteImage.png", "Imagenes/pisoSote.png")
@@ -191,8 +294,15 @@ def seleccion_de_nivel():
             # Mostrar texto del nivel frente a la puerta
             txt.text(textos_niveles[i], posiciones[i] - 3, -3, 2, 25, 255, 255, 0, 0, 0, 0)
 
+<<<<<<< Updated upstream
         # Dibujar el botón "Volver"
         draw_back_button()
 
         pygame.display.flip()
         pygame.time.wait(10)
+=======
+         # --- Dibuja el botón VOLVER con OpenGL ---
+        draw_volver_button(seleccionando_volver)
+        glClearColor(0.9, 0.9, 0.95, 1.0)
+        pygame.display.flip()
+>>>>>>> Stashed changes
