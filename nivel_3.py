@@ -143,7 +143,7 @@ def iniciar_puertas(personaje):
         for pos in posiciones_puertas:
             glPushMatrix()
             glTranslatef(pos, 0, z_puerta)
-            glScalef(2.5, 2.5, 2.5)
+            glScalef(4, 4, 2.5)
             draw_puerta()
             glPopMatrix()
 

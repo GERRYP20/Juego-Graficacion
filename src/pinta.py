@@ -59,7 +59,7 @@ def pintaEsfera3():
 def pintaEsferaMike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0)  
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matRojo()
     obj.esfera(r, sl, seg)
     glPopMatrix()
@@ -67,7 +67,7 @@ def pintaEsferaMike(x, y, z, r, sl, seg):
 def pintaCilindroMike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0)  
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulMarino()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -87,7 +87,7 @@ def pintaCilindro():
 def pintaCaraMike(x,y,z,r,a):
     glPushMatrix()
     glTranslatef(x,y,z)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0) 
     cl.matDuraznoPiel()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -95,7 +95,7 @@ def pintaCaraMike(x,y,z,r,a):
 def pintaZapatosMike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(1.0, 1.0, 1.0) 
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matBlanco()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -104,7 +104,7 @@ def pintaBrazoMike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(90, 0, 1, 0)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulMarino()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -112,7 +112,7 @@ def pintaBrazoMike(x, y, z, r, a):
 def pintaOjosMike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulClaro()
     obj.esfera(r, sl, seg)
     glPopMatrix()
@@ -120,7 +120,7 @@ def pintaOjosMike(x, y, z, r, sl, seg):
 def pintaBocaSorpresaMike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0) 
     cl.matNegro()
     obj.esfera(r, sl, seg)
     glPopMatrix()
@@ -128,7 +128,7 @@ def pintaBocaSorpresaMike(x, y, z, r, sl, seg):
 def pintaCilindro2Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0) 
     cl.matAmarillo()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -136,7 +136,7 @@ def pintaCilindro2Mike(x, y, z, r, a):
 def pintaEsfera2Mike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0)  
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAmarillo()
     obj.esfera(r, sl, seg)
     glPopMatrix()
@@ -144,7 +144,7 @@ def pintaEsfera2Mike(x, y, z, r, sl, seg):
 def pintaManosMike(x, y, z, r, sl, seg):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matDuraznoPiel()
     obj.esfera(r, sl, seg)
     glPopMatrix()
@@ -152,7 +152,7 @@ def pintaManosMike(x, y, z, r, sl, seg):
 def pintaCintasMike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matBlanco()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -161,7 +161,7 @@ def pintaCejasMike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(90, 0, 1, 0)
-    lc.iluminacion(0.0, 0.0, 0.0)
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matNegro()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -170,7 +170,7 @@ def pintaBrazo1Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(-200, 0, 1, 0)
-    lc.iluminacion(0.0, 0.0, 0.0) 
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulMarino()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -189,7 +189,7 @@ def pintaCejasenojado1Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(45, 0, 1, 0)
-    lc.iluminacion(0.0, 0.0, 0.0)
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matNegro()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -198,7 +198,7 @@ def pintaCejasenojado2Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(-45, 0, 1, 0)
-    lc.iluminacion(0.0, 0.0, 0.0)
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matNegro()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -207,7 +207,7 @@ def pintaPierna1Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(90, 1, 0, 0)
-    lc.iluminacion(0.0, 0.0, 0.0)  
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulMarino()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -216,7 +216,7 @@ def pintaPierna2Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(45, 1, 0, 0)
-    lc.iluminacion(0.0, 0.0, 0.0)  
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulMarino()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -225,7 +225,7 @@ def pintaPierna3Mike(x, y, z, r, a):
     glPushMatrix()
     glTranslatef(x, y, z)
     glRotatef(-45, 1, 0, 0)
-    lc.iluminacion(0.0, 0.0, 0.0)  
+    lc.iluminacion(1.0, 1.0, 1.0)
     cl.matAzulMarino()
     obj.cilindro(r, a, 40)
     glPopMatrix()
@@ -496,6 +496,7 @@ def pintarsincambiosMike():
 #huesos
 
 def pintaHuesos():
+    lc.iluminacion(1.0, 1.0, 1.0)
     obj.figura_completa()
 
 def pintaHuesos2():

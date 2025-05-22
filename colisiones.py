@@ -18,7 +18,7 @@ pelota2_activa = True
 
 # Variables globales para las esferas
 esferas_pos = [
-    [-30, 40, 0],  # Esfera 1
+    [-30, 0, 0],  # Esfera 1
     [-15, 40, 0],   # Esfera 2
     [0, 40, 0],   # Esfera 3
     [15, 40, 0],    # Esfera 4
@@ -155,7 +155,7 @@ def detectar_colision2():
 
 
 def detectar_colision_puertas(posx, posz, posiciones_puertas, respuesta_correcta, z_puerta=-10):
-    ancho_puerta = 2.5  # mitad del ancho de la puerta escalada
+    ancho_puerta = 4  # mitad del ancho de la puerta escalada
     profundidad_colision = 1.0  # rango de colisión en Z
 
     for i, px in enumerate(posiciones_puertas):

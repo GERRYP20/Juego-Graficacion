@@ -60,8 +60,8 @@ def configurar_opengl():
 
     gluPerspective(45, (display[0] / display[1]), 0.1, 500.0)
 
-    glTranslatef(0, -7, -30)
-    glRotatef(15, 1, 0, 0)
+    glTranslatef(0, -20, -50)
+    #glRotatef(15, 1, 0, 0)
 
     pygame.event.set_grab(True)
     pygame.mouse.set_visible(True)
@@ -363,19 +363,15 @@ def iniciar_lobby(personaje):
         # Llamar a la función de dibujo del personaje
         personaje_dibujar()                        
 
-        # Mostrar texto solo en el escenario 7
-        if escenario_actual == 6:  # Escenario 7 (índice 6)
-            tx.text("Figura Caminando", 20, 36, 0, 20, 0, 0, 0, 255, 255, 255)
-
-        tx.text("Instrucciones:",-25,38,0,20,0,0,0,255,255,255)
-        tx.text("Presiona de 1-7 para cambiar de escenario",-10.5,16,6,30,0,0,0,255,255,255)
-        tx.text("Para mover la camara usar: a,s,d,w,z,x",-10.5,15,6,30,0,0,0,255,255,255)
-        tx.text("Encender sonido general: p",-10.5,14,6,30,0,0,0,255,255,255)
-        tx.text("Salir: ESC",-10.5,13,6,30,0,0,0,255,255,255)
-        tx.text("GRAFICACIÓN",5,14,6,30,0,0,0,255,255,255)
-        tx.text("Presiona i para lanzar la pelota", -11, 12, 6, 30, 0, 0, 0, 255, 255, 255)
-        tx.text("Presiona u para lanzar la pelota", -11, 11, 6, 30, 0, 0, 0, 255, 255, 255)
-        tx.text("PRESIONA ENTER PARA CONTINUAR", -8.5, 2, 6, 40, 0, 0, 0, 255, 255, 255)
+        tx.text("Instrucciones:", -25, 38, 0, 35, 0,0,0,255,255,255)
+        tx.text("Presiona de 1-7 para cambiar de escenario", -25, 36, 0, 30, 0,0,0,255,255,255)
+        tx.text("Para mover la camara usar: a,s,d,w,z,x", -25, 34, 0, 30, 0,0,0,255,255,255)
+        tx.text("Encender sonido general: p", -25, 32, 0, 30, 0,0,0,255,255,255)
+        tx.text("Apagar sonido general: o", -25, 30, 0, 30, 0,0,0,255,255,255)
+        tx.text("Volver al menu: m", -25, 28, 0, 30, 0,0,0,255,255,255)
+        tx.text("Presiona u para lanzar la pelota", -25, 26, 0, 30, 0,0,0,255,255,255)
+        #tx.text("Presiona u para lanzar la pelota2", -25, 24, 0, 30, 0,0,0,255,255,255)
+        tx.text("PRESIONA ENTER PARA CONTINUAR", -20, 18, 0, 40, 0,0,0,255,255,255)
         mover_pelota()
         if pelota_activa:
             dibujar_pelota()

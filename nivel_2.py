@@ -9,6 +9,7 @@ import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
 from Acciones.sonidos import *
+import Acciones.luces as lc
 
 # --- Variables globales ---
 posx, posy, posz = 0, 0, 0
@@ -156,7 +157,14 @@ def iniciar_ruinas(personaje):
                     liberar_texturas()
                     sonidoOff()
                     return
-                teclas_activas.add(event.key)
+                elif event.key == K_RETURN and tiempo_terminado:
+                    posx, posy, posz = 0, 0, 0
+                    generar_cartas()
+                    seleccionadas.clear()
+                    inicio_tiempo = time.time()
+                    tiempo_terminado = False
+                else:
+                    teclas_activas.add(event.key)
             elif event.type == KEYUP:
                 teclas_activas.discard(event.key)
             elif event.type == MOUSEBUTTONDOWN and event.button == 1 and not tiempo_terminado:
@@ -168,19 +176,25 @@ def iniciar_ruinas(personaje):
 
                     if len(seleccionadas) == 2:
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+                        glDisable(GL_LIGHTING)
                         es.pinta_escenario("Imagenes/hueso type.png", "Imagenes/suelo3.jpg")
-                        glBindTexture(GL_TEXTURE_2D, 0)
-                        glDisable(GL_TEXTURE_2D)
+                        for carta in cartas:
+                            dibujar_carta(carta)
+                        glEnable(GL_LIGHTING)
                         glPushMatrix()
                         glTranslatef(posx, posy, posz)
                         personaje_dibujar()
                         glPopMatrix()
-                        for carta in cartas:
-                            dibujar_carta(carta)
                         tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
                         tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+                        # --- TEMPORIZADOR ---
+                        tiempo_restante = max(0, int(tiempo_limite - (time.time() - inicio_tiempo)))
+                        tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
+                        # --- MENSAJE DE REINTENTO SI SE TERMINÓ EL TIEMPO ---
+                        if tiempo_terminado:
+                            tx.text("Tiempo terminado!", -10, 37, 0, 35, 255, 0, 0, 0, 0, 0)
+                            tx.text("Presiona ENTER para reintentar", 10, 0, 15, 22, 255, 255, 255, 0, 0, 0)
                         pygame.display.flip()
-
                         pygame.time.wait(800)
 
                         if seleccionadas[0]["textura"] == seleccionadas[1]["textura"]:
@@ -200,28 +214,44 @@ def iniciar_ruinas(personaje):
             if K_d in teclas_activas:
                 posx += velocidad
 
+            # Limita el movimiento del personaje en X
+        posx = max(-36, min(36, posx))  # Cambia  según el rango visible del juego
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
+        # --- Desactiva iluminación para fondo y cartas ---
+        glDisable(GL_LIGHTING)
         es.pinta_escenario("Imagenes/hueso type.png", "Imagenes/suelo3.jpg")
-        glBindTexture(GL_TEXTURE_2D, 0)
-        glDisable(GL_TEXTURE_2D)
+
+        for carta in cartas:
+            dibujar_carta(carta)
+
+        # --- Activa iluminación para el personaje ---
+        glEnable(GL_LIGHTING)
         glPushMatrix()
         glTranslatef(posx, posy, posz)
         personaje_dibujar()
         glPopMatrix()
 
-        for carta in cartas:
-            dibujar_carta(carta)
 
-        tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
-        tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+        tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 32, 255, 255, 255, 0, 0, 0)
+        tx.text("Da clic en las tarjetsa para voltearlas", -8, 44, 0, 24, 255, 255, 255, 0, 0, 0)
+        tx.text("Presiona ESC para regresar", -8, 42, 0, 24, 255, 255, 255, 0, 0, 0)
 
+
+        # --- TEMPORIZADOR EN LA PARTE INFERIOR ---
+        tiempo_limite = 25
         tiempo_actual = time.time()
-        if not tiempo_terminado and tiempo_actual - inicio_tiempo > 20:
+        tiempo_transcurrido = tiempo_actual - inicio_tiempo
+        tiempo_restante = max(0, int(tiempo_limite - tiempo_transcurrido))
+        tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
+
+        if not tiempo_terminado and tiempo_actual - inicio_tiempo > tiempo_limite:
             tiempo_terminado = True
 
         if tiempo_terminado:
-            tx.text("Tiempo terminado!", -10, 37, 0, 30, 255, 0, 0, 0, 0, 0)
+            tx.text("Tiempo terminado!", -10, 37, 0, 35, 255, 0, 0, 0, 0, 0)
+            tx.text("Presiona ENTER para reintentar", 10, 0, 15, 22, 255, 255, 255, 0, 0, 0)
 
         pygame.display.flip()
         reloj.tick(60)
