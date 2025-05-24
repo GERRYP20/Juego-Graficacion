@@ -5,6 +5,8 @@ import pygame
 from pygame.locals import *
 import random
 import time
+import os
+
 import src.pinta as pt
 import Acciones.escenarios as es
 import Acciones.textos as tx
@@ -15,14 +17,26 @@ import Acciones.luces as lc
 posx, posy, posz = 0, 0, 0
 cartas = []
 seleccionadas = []
-textura_poker = "imagenes/poker.png" # textura para la parte trasera de las cartas
+textura_poker = 0  # textura para la parte trasera de las cartas (ID numérico)
 
 def cargar_textura(ruta):
-    surface = pygame.image.load(ruta)
+    if not os.path.isfile(ruta):
+        print(f"[ERROR] No se encontró la imagen: {ruta}")
+        return 0
+    try:
+        surface = pygame.image.load(ruta)
+    except Exception as e:
+        print(f"[ERROR] No se pudo cargar la imagen {ruta}: {e}")
+        return 0
+
     data = pygame.image.tostring(surface, "RGBA", 1)
     width = surface.get_width()
     height = surface.get_height()
     texture_id = glGenTextures(1)
+    if texture_id == 0:
+        print(f"[ERROR] No se pudo generar textura OpenGL para {ruta}")
+        return 0
+
     glBindTexture(GL_TEXTURE_2D, texture_id)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -36,9 +50,12 @@ def generar_cartas():
     cartas.clear()
 
     for i, img in enumerate(imagenes):
-        textura_id = cargar_textura("imagenes/" + img)
+        ruta = "imagenes/" + img
+        textura_id = cargar_textura(ruta)
+        if textura_id == 0:
+            print(f"[WARN] La carta {img} no tendrá textura válida.")
         y_pos = 0 if i < 5 else 24
-        x_pos = -40 + (i % 5) * 22
+        x_pos = -44 + (i % 5) * 22
         cartas.append({
             "id": i,
             "textura": img,
@@ -50,18 +67,21 @@ def generar_cartas():
 def liberar_texturas():
     global cartas, textura_poker
     for carta in cartas:
-        glDeleteTextures([carta["textura_id"]])
+        if carta["textura_id"]:
+            glDeleteTextures([carta["textura_id"]])
     if textura_poker:
         glDeleteTextures([textura_poker])
     cartas.clear()
+    textura_poker = 0
 
 def dibujar_carta(carta):
+    if carta["textura_id"] == 0:
+        return  # No se dibuja carta con textura inválida
+
     glPushMatrix()
     x, y, z = carta["pos"]
     glTranslatef(x, y, z)
-
     glEnable(GL_TEXTURE_2D)
-    glBindTexture(GL_TEXTURE_2D, 0)
 
     ancho = 9
     alto = 18
@@ -69,7 +89,10 @@ def dibujar_carta(carta):
     if carta["descubierta"]:
         glBindTexture(GL_TEXTURE_2D, carta["textura_id"])
     else:
-        glBindTexture(GL_TEXTURE_2D, textura_poker)
+        if textura_poker != 0:
+            glBindTexture(GL_TEXTURE_2D, textura_poker)
+        else:
+            glBindTexture(GL_TEXTURE_2D, 0)
 
     glBegin(GL_QUADS)
     glTexCoord2f(0, 0); glVertex3f(-ancho, 0, 0)
@@ -86,13 +109,13 @@ def detectar_carta_click(mouse_x, mouse_y):
     viewport = glGetIntegerv(GL_VIEWPORT)
     modelview = glGetDoublev(GL_MODELVIEW_MATRIX)
     projection = glGetDoublev(GL_PROJECTION_MATRIX)
-
     real_y = viewport[3] - mouse_y
     z = glReadPixels(mouse_x, real_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT)
+
     if z is None or z == 1.0:
         return None
-    wx, wy, wz = gluUnProject(mouse_x, real_y, z, modelview, projection, viewport)
 
+    wx, wy, wz = gluUnProject(mouse_x, real_y, z, modelview, projection, viewport)
     for carta in cartas:
         x, y, z_pos = carta["pos"]
         if (x - 9 <= wx <= x + 9) and (y <= wy <= y + 18) and (abs(wz - z_pos) < 5):
@@ -127,16 +150,15 @@ def iniciar_ruinas(personaje):
     gluPerspective(45, (display[0] / display[1]), 0.1, 500.0)
     glTranslatef(0, -20, -70)
 
-    if personaje == "mapache":
-        personaje_dibujar = pt.pintaMapache
-    elif personaje == "huesos":
-        personaje_dibujar = pt.pintaHuesos
-    elif personaje == "mike":
-        personaje_dibujar = pt.pintarsincambiosMike
-    else:
-        personaje_dibujar = pt.pintaMapache
+    personaje_dibujar = {
+        "mapache": pt.pintaMapache,
+        "huesos": pt.pintaHuesos,
+        "mike": pt.pintarsincambiosMike
+    }.get(personaje, pt.pintaMapache)
 
     textura_poker = cargar_textura("imagenes/poker.png")
+    if textura_poker == 0:
+        print("[ERROR] No se pudo cargar la textura trasera de las cartas.")
     generar_cartas()
     seleccionadas.clear()
 
@@ -145,6 +167,7 @@ def iniciar_ruinas(personaje):
     velocidad = 1.0
     inicio_tiempo = time.time()
     tiempo_terminado = False
+    tiempo_limite = 25
 
     while True:
         for event in pygame.event.get():
@@ -173,7 +196,6 @@ def iniciar_ruinas(personaje):
                 if carta_seleccionada and not carta_seleccionada["descubierta"]:
                     carta_seleccionada["descubierta"] = True
                     seleccionadas.append(carta_seleccionada)
-
                     if len(seleccionadas) == 2:
                         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
                         glDisable(GL_LIGHTING)
@@ -185,68 +207,47 @@ def iniciar_ruinas(personaje):
                         glTranslatef(posx, posy, posz)
                         personaje_dibujar()
                         glPopMatrix()
-                        tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
+                        tx.text("¡Bienvenido al Memorama!", -12, 46, 0, 30, 255, 255, 255, 0, 0, 0)
                         tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
-                        # --- TEMPORIZADOR ---
                         tiempo_restante = max(0, int(tiempo_limite - (time.time() - inicio_tiempo)))
                         tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
-                        # --- MENSAJE DE REINTENTO SI SE TERMINÓ EL TIEMPO ---
-                        if tiempo_terminado:
-                            tx.text("Tiempo terminado!", -10, 37, 0, 35, 255, 0, 0, 0, 0, 0)
-                            tx.text("Presiona ENTER para reintentar", 10, 0, 15, 22, 255, 255, 255, 0, 0, 0)
                         pygame.display.flip()
                         pygame.time.wait(800)
-
-                        if seleccionadas[0]["textura"] == seleccionadas[1]["textura"]:
-                            pass
-                        else:
+                        if seleccionadas[0]["textura"] != seleccionadas[1]["textura"]:
                             for c in seleccionadas:
                                 c["descubierta"] = False
                         seleccionadas.clear()
 
         if not tiempo_terminado:
-            if K_w in teclas_activas:
-                posz -= velocidad
-            if K_s in teclas_activas:
-                posz += velocidad
-            if K_a in teclas_activas:
-                posx -= velocidad
-            if K_d in teclas_activas:
-                posx += velocidad
-
-            # Limita el movimiento del personaje en X
-        posx = max(-36, min(36, posx))  # Cambia  según el rango visible del juego
+            if K_w in teclas_activas: posz -= velocidad
+            if K_s in teclas_activas: posz += velocidad
+            if K_a in teclas_activas: posx -= velocidad
+            if K_d in teclas_activas: posx += velocidad
+        posx = max(-36, min(36, posx))
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-        # --- Desactiva iluminación para fondo y cartas ---
         glDisable(GL_LIGHTING)
         es.pinta_escenario("Imagenes/hueso type.png", "Imagenes/suelo3.jpg")
 
         for carta in cartas:
             dibujar_carta(carta)
 
-        # --- Activa iluminación para el personaje ---
         glEnable(GL_LIGHTING)
         glPushMatrix()
         glTranslatef(posx, posy, posz)
         personaje_dibujar()
         glPopMatrix()
 
-
-        tx.text("\u00a1Bienvenido al Memorama!", -12, 46, 0, 32, 255, 255, 255, 0, 0, 0)
-        tx.text("Da clic en las tarjetsa para voltearlas", -8, 44, 0, 24, 255, 255, 255, 0, 0, 0)
+        tx.text("¡Bienvenido al Memorama!", -12, 46, 0, 32, 255, 255, 255, 0, 0, 0)
+        tx.text("Da clic en las tarjetas para voltearlas", -8, 44, 0, 24, 255, 255, 255, 0, 0, 0)
         tx.text("Presiona ESC para regresar", -8, 42, 0, 24, 255, 255, 255, 0, 0, 0)
 
-
-        # --- TEMPORIZADOR EN LA PARTE INFERIOR ---
-        tiempo_limite = 25
         tiempo_actual = time.time()
         tiempo_transcurrido = tiempo_actual - inicio_tiempo
         tiempo_restante = max(0, int(tiempo_limite - tiempo_transcurrido))
         tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
 
-        if not tiempo_terminado and tiempo_actual - inicio_tiempo > tiempo_limite:
+        if not tiempo_terminado and tiempo_transcurrido > tiempo_limite:
             tiempo_terminado = True
 
         if tiempo_terminado:
