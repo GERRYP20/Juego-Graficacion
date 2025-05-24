@@ -32,6 +32,16 @@ def draw_puerta():
     glVertex3f(-1, 4, 0.8)
     glEnd()
 
+def resetear_opengl():
+    glDisable(GL_LIGHTING)
+    glDisable(GL_LIGHT0)
+    glDisable(GL_COLOR_MATERIAL)
+    glDisable(GL_DEPTH_TEST)
+    glClearColor(0, 0, 0, 1)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    pygame.display.quit()  # Cierra la ventana y destruye el contexto
+    pygame.quit() 
+
 def iniciar_puertas(personaje):
     global posx, posy, posz
 
@@ -82,14 +92,14 @@ def iniciar_puertas(personaje):
     mensajes = [
         "Primera decisión importante...",
         "Evalúa bien tus opciones.",
-        "Elige la puerta correcta.",
-        "Tienes 10 segundos para decidir.",
+        "Atraviesa la puerta correcta.",
+        "Tienes 5 segundos para decidir.",
         "¡Buena suerte!"
     ]
     duracion_mensaje = 3
     tiempo_total_mensajes = len(mensajes) * duracion_mensaje
 
-    temporizador = ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"]
+    temporizador = ["5", "4", "3", "2", "1"]
 
     preguntas = [
         ("¿Cada cuánto debes cepillarte los dientes?", 
@@ -97,7 +107,7 @@ def iniciar_puertas(personaje):
         ("¿Qué es lo más importante para mantener las manos limpias?", 
          ["Enjuagarlas con agua", "Lavarlas con agua y jabón", "Secarlas al sol"], 1),
         ("¿Por qué es importante bañarse con regularidad?", 
-         ["Para gastar agua", "Para sentirse más alto", "Para eliminar bacterias y olores"], 2),
+         ["Para gastar agua", "Para ser más alto", "Para eliminar bacterias y olores"], 2),
         ("¿Cuál es un buen hábito antes de comer?", 
          ["Lavar las manos", "Correr", "Ver televisión"], 0),
         ("¿Qué debes hacer después de ir al baño?", 
@@ -113,12 +123,13 @@ def iniciar_puertas(personaje):
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
+                resetear_opengl()
                 pygame.quit()
                 quit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    sonidoOff()
-                    return
+                    resetear_opengl()
+                    return None
                 teclas_activas.add(event.key)
             if event.type == KEYUP:
                 teclas_activas.discard(event.key)
@@ -155,7 +166,7 @@ def iniciar_puertas(personaje):
             mensaje = mensajes[indice_msg]
             tx.text(mensaje, -10, 37, 0, 30, 255, 255, 255, 0, 0, 0)
             tx.text("¡Bienvenido al laberinto de Decisiones!", -16, 46, 0, 30, 255, 255, 255, 0, 0, 0)
-            tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
+            tx.text("Presiona ESC para regresar a los niveles", -14, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
         elif tiempo_transcurrido <= tiempo_total_mensajes + len(temporizador):
             tiempo_timer = tiempo_transcurrido - tiempo_total_mensajes
@@ -180,7 +191,7 @@ def iniciar_puertas(personaje):
             tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
             for i, pos in enumerate(posiciones_puertas):
-                tx.text(respuestas[i], pos - len(respuestas[i]) * 0.5, 10, z_puerta, 22, 255, 255, 0, 0, 0, 0)
+                tx.text(respuestas[i], pos - len(respuestas[i]) * 0.5, 18, z_puerta, 22, 255, 255, 0, 0, 0, 0)
 
             if tiempo_actual - tiempo_pregunta_inicio > duracion_pregunta:
                 avanzar_pregunta = True

@@ -163,7 +163,7 @@ def draw_volver_button(selected=False):
     glPopAttrib()
 
     # Borde superior
-    glColor3f(0.3, 0.15, 0.0)
+    glColor3f(1.0, 1.0, 1.0)
     glBegin(GL_QUADS)
     glVertex3f(-1, 4, 1)
     glVertex3f(1, 4, 1)
