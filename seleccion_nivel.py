@@ -273,6 +273,8 @@ def seleccion_de_nivel():
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         es.pinta_escenario2("Imagenes/SoteImage.png", "Imagenes/pisoSote.png")
         txt.text("¡SELECCIONA UN NIVEL!", -12, 12, -18, 50, 255, 255, 0, 0, 0, 0)
+        txt.text("USA LAS FLECHAS DE DIRECCIÓN   O EL MOUSE", -18, 10, -18, 50, 255, 255, 0, 0, 0, 0)
+        txt.text("O EL MOUSE", -6, 8, -18, 50, 255, 255, 0, 0, 0, 0)
 
         for i in range(3):
             draw_base(posiciones[i], selected_level == i and not seleccionando_volver)
