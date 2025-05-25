@@ -67,66 +67,7 @@ def draw_base(x_offset, selected):
     glVertex3f(x_offset - base_size, -2, -base_size)
     glEnd()
 
-# def draw_back_button():
-#     button_width = 150
-#     button_height = 40
-#     x = 800 - button_width - 10
-#     y = 10
 
-#     glMatrixMode(GL_PROJECTION)
-#     glPushMatrix()
-#     glLoadIdentity()
-#     gluOrtho2D(0, 800, 600, 0)
-#     glMatrixMode(GL_MODELVIEW)
-#     glPushMatrix()
-#     glLoadIdentity()
-
-#     glColor3f(0.2, 0.2, 0.8)
-#     glBegin(GL_QUADS)
-#     glVertex2f(x, y)
-#     glVertex2f(x + button_width, y)
-#     glVertex2f(x + button_width, y + button_height)
-#     glVertex2f(x, y + button_height)
-#     glEnd()
-
-#     glDisable(GL_DEPTH_TEST)
-#     txt.text("Volver", x + 25, y + 30, 0, 40, 255, 255, 255, 0, 0, 0)
-#     glEnable(GL_DEPTH_TEST)
-
-#     glMatrixMode(GL_PROJECTION)
-#     glPopMatrix()
-#     glMatrixMode(GL_MODELVIEW)
-#     glPopMatrix()
-
-def is_back_button_clicked(mx, my):
-    button_width = 150
-    button_height = 40
-    x = 800 - button_width - 10  # Posición X en la parte derecha
-    y = 10  # Posición Y en la parte superior
-
-    # Verificar si el clic está dentro del área del botón
-    if x <= mx <= x + button_width and y <= my <= y + button_height:
-        return True
-    return False
-
-# def draw_base(x_offset, selected):
-#     base_size = 2.0
-#     glColor3f(1, 1, 0) if selected else glColor3f(0.5, 0.5, 0.5)
-#     glBegin(GL_QUADS)
-#     glVertex3f(x_offset - base_size, -2, base_size)
-#     glVertex3f(x_offset + base_size, -2, base_size)
-#     glVertex3f(x_offset + base_size, -2, -base_size)
-#     glVertex3f(x_offset - base_size, -2, -base_size)
-#     glEnd()
-
-# def draw_puerta():
-#     glColor3f(0.6, 0.3, 0.0)  # Color madera
-#     glBegin(GL_QUADS)
-#     # Frente de la puerta
-#     glVertex3f(-1, 0, 1)
-#     glVertex3f(1, 0, 1)
-#     glVertex3f(1, 4, 1)
-#     glVertex3f(-1, 4, 1)
 def draw_volver_button(selected=False):
     # Guarda el estado actual de color
     glPushAttrib(GL_CURRENT_BIT)
@@ -162,14 +103,6 @@ def draw_volver_button(selected=False):
     # Restaura el color anterior
     glPopAttrib()
 
-    # Borde superior
-    glColor3f(1.0, 1.0, 1.0)
-    glBegin(GL_QUADS)
-    glVertex3f(-1, 4, 1)
-    glVertex3f(1, 4, 1)
-    glVertex3f(1, 4, 0.8)
-    glVertex3f(-1, 4, 0.8)
-    glEnd()
 def mouse_sobre_volver(mouse_x, mouse_y, ancho=800, alto=600):
     # Ajusta estos valores para que coincidan con el área visual del botón
     btn_left = int(ancho * 0.75)      # 600
