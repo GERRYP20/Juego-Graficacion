@@ -75,6 +75,16 @@ def liberar_texturas():
     cartas.clear()
     textura_poker = 0
 
+def resetear_opengl():
+    glDisable(GL_LIGHTING)
+    glDisable(GL_LIGHT0)
+    glDisable(GL_COLOR_MATERIAL)
+    glDisable(GL_DEPTH_TEST)
+    glClearColor(0, 0, 0, 1)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    pygame.display.quit()
+    pygame.quit()
+
 def dibujar_carta(carta):
     if carta["textura_id"] == 0:
         return  # No se dibuja carta con textura inválida
@@ -171,6 +181,7 @@ def iniciar_ruinas(personaje):
     teclas_activas = set()
     velocidad = 1.0
     inicio_tiempo = time.time()
+    mostrar_instrucciones = True
     tiempo_terminado = False
     tiempo_limite = 25
     juego_ganado = False  # Reiniciamos variable al iniciar
@@ -185,6 +196,7 @@ def iniciar_ruinas(personaje):
                 if event.key == K_ESCAPE:
                     liberar_texturas()
                     sonidoOff()
+                    resetear_opengl()
                     return
                 elif event.key == K_RETURN and tiempo_terminado:
                     posx, posy, posz = 0, 0, 0
@@ -256,6 +268,13 @@ def iniciar_ruinas(personaje):
 
         if not juego_ganado:
             tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
+            
+        if mostrar_instrucciones:
+            if tiempo_transcurrido < 5:
+                tx.text("Empareja las cartas iguales haciendo clic sobre ellas", -18, 42, 0, 22, 255, 255, 0, 0, 0, 0)
+                tx.text("Completa el juego antes de que se acabe el tiempo", -16, 40, 0, 22, 255, 100, 100, 0, 0, 0)
+            else:
+                mostrar_instrucciones = False
 
         # Verificar si ganó
         if not juego_ganado and todas_las_cartas_descubiertas():
@@ -268,6 +287,6 @@ def iniciar_ruinas(personaje):
         elif tiempo_terminado:
             tx.text("¡Se te acabó el tiempo!", -16, 10, 0, 40, 255, 0, 0, 0, 0, 0)
             tx.text("Presiona ENTER para reiniciar", 15, 0, 0, 20, 255, 255, 255, 0, 0, 0)
-            
+
         pygame.display.flip()
         reloj.tick(30)
