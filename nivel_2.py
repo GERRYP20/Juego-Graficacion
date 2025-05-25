@@ -18,6 +18,7 @@ posx, posy, posz = 0, 0, 0
 cartas = []
 seleccionadas = []
 textura_poker = 0  # textura para la parte trasera de las cartas (ID numérico)
+juego_ganado = False  # NUEVO: para controlar cuando se gana
 
 def cargar_textura(ruta):
     if not os.path.isfile(ruta):
@@ -122,8 +123,11 @@ def detectar_carta_click(mouse_x, mouse_y):
             return carta
     return None
 
+def todas_las_cartas_descubiertas():
+    return all(carta["descubierta"] for carta in cartas)
+
 def iniciar_ruinas(personaje):
-    global posx, posy, posz, textura_poker, seleccionadas
+    global posx, posy, posz, textura_poker, seleccionadas, juego_ganado
 
     es.ultimo_fondo = None
     es.ultimo_suelo = None
@@ -160,6 +164,7 @@ def iniciar_ruinas(personaje):
     if textura_poker == 0:
         print("[ERROR] No se pudo cargar la textura trasera de las cartas.")
     generar_cartas()
+    generar_cartas()
     seleccionadas.clear()
 
     reloj = pygame.time.Clock()
@@ -168,6 +173,7 @@ def iniciar_ruinas(personaje):
     inicio_tiempo = time.time()
     tiempo_terminado = False
     tiempo_limite = 25
+    juego_ganado = False  # Reiniciamos variable al iniciar
 
     while True:
         for event in pygame.event.get():
@@ -186,11 +192,12 @@ def iniciar_ruinas(personaje):
                     seleccionadas.clear()
                     inicio_tiempo = time.time()
                     tiempo_terminado = False
+                    juego_ganado = False  # Reiniciar estado juego ganado
                 else:
                     teclas_activas.add(event.key)
             elif event.type == KEYUP:
                 teclas_activas.discard(event.key)
-            elif event.type == MOUSEBUTTONDOWN and event.button == 1 and not tiempo_terminado:
+            elif event.type == MOUSEBUTTONDOWN and event.button == 1 and not tiempo_terminado and not juego_ganado:
                 mx, my = pygame.mouse.get_pos()
                 carta_seleccionada = detectar_carta_click(mx, my)
                 if carta_seleccionada and not carta_seleccionada["descubierta"]:
@@ -218,7 +225,7 @@ def iniciar_ruinas(personaje):
                                 c["descubierta"] = False
                         seleccionadas.clear()
 
-        if not tiempo_terminado:
+        if not tiempo_terminado and not juego_ganado:
             if K_w in teclas_activas: posz -= velocidad
             if K_s in teclas_activas: posz += velocidad
             if K_a in teclas_activas: posx -= velocidad
@@ -239,20 +246,28 @@ def iniciar_ruinas(personaje):
         glPopMatrix()
 
         tx.text("¡Bienvenido al Memorama!", -12, 46, 0, 32, 255, 255, 255, 0, 0, 0)
-        tx.text("Da clic en las tarjetas para voltearlas", -8, 44, 0, 24, 255, 255, 255, 0, 0, 0)
-        tx.text("Presiona ESC para regresar", -8, 42, 0, 24, 255, 255, 255, 0, 0, 0)
+        tx.text("Presiona ESC para regresar", -8, 44, 0, 20, 255, 255, 255, 0, 0, 0)
 
-        tiempo_actual = time.time()
-        tiempo_transcurrido = tiempo_actual - inicio_tiempo
+        tiempo_transcurrido = time.time() - inicio_tiempo
         tiempo_restante = max(0, int(tiempo_limite - tiempo_transcurrido))
-        tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
-
-        if not tiempo_terminado and tiempo_transcurrido > tiempo_limite:
+        if tiempo_restante == 0:
             tiempo_terminado = True
 
-        if tiempo_terminado:
-            tx.text("Tiempo terminado!", -10, 37, 0, 35, 255, 0, 0, 0, 0, 0)
-            tx.text("Presiona ENTER para reintentar", 10, 0, 15, 22, 255, 255, 255, 0, 0, 0)
 
+        if not juego_ganado:
+            tx.text(f"Tiempo restante: {tiempo_restante} s", -26, 0, 15, 26, 255, 255, 0, 0, 0, 0)
+
+        # Verificar si ganó
+        if not juego_ganado and todas_las_cartas_descubiertas():
+            juego_ganado = True
+            tiempo_terminado = True
+
+        if juego_ganado:
+            tx.text("¡Has ganado!", -10, 37, 0, 35, 0, 255, 0, 0, 0, 0)
+            tx.text("Presiona ENTER para volver a jugar", 15, 0, 0, 20, 255, 255, 255, 0, 0, 0)
+        elif tiempo_terminado:
+            tx.text("¡Se te acabó el tiempo!", -16, 10, 0, 40, 255, 0, 0, 0, 0, 0)
+            tx.text("Presiona ENTER para reiniciar", 15, 0, 0, 20, 255, 255, 255, 0, 0, 0)
+            
         pygame.display.flip()
-        reloj.tick(60)
+        reloj.tick(30)
