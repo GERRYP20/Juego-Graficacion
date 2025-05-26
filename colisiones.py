@@ -156,7 +156,7 @@ def detectar_colision2():
 
 def detectar_colision_puertas(posx, posz, posiciones_puertas, respuesta_correcta, z_puerta=-10):
     ancho_puerta = 4  # mitad del ancho de la puerta escalada
-    profundidad_colision = 1.0  # rango de colisión en Z
+    profundidad_colision = 1.75  # rango de colisión en Z
 
     for i, px in enumerate(posiciones_puertas):
         # Checar si posx está dentro del ancho de la puerta

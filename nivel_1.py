@@ -154,7 +154,7 @@ def iniciar_memorama(personaje):
     ]
 
     respuestas_correctas = [2, 0, 0, 1, 4, 0]  # Índices de la respuesta correcta para cada pregunta
-    tiempo_preguntas = [5, 22, 42, 62, 82, 102]  # Tiempos en segundos para cada pregunta
+    tiempo_preguntas = [5, 21, 41, 61, 81, 101]  # Tiempos en segundos para cada pregunta
     pregunta_mostrada = -1
 
 
@@ -253,12 +253,15 @@ def iniciar_memorama(personaje):
             for i, (x, y, z) in enumerate(esferas_pos):
                 if esferas_activas[i]:
                     texto = opciones_preguntas[pregunta_mostrada][i]
-                    # Si el texto es muy largo, lo dividimos en dos líneas
-                    if len(texto) > 22:
+                    lineas = [texto]
+                    if len(texto) > 26:
                         palabras = texto.split()
                         mitad = len(palabras) // 2
-                        texto = ' '.join(palabras[:mitad]) + '\n' + ' '.join(palabras[mitad:])
-                    tx.text(texto, x - 6, y + 5, z, 16, 255, 255, 255, 0, 0, 0)
+                        lineas = [' '.join(palabras[:mitad]), ' '.join(palabras[mitad:])]
+
+                    for j, linea in enumerate(lineas):
+                        # Ajusta el 3 si quieres más o menos separación entre líneas
+                        tx.text(linea, x - 5, y + 6 - j * 1.1, z, 17, 255, 255, 255, 0, 0, 0)
 
         if mostrar_resultado:
             if time.time() - resultado_tiempo < 5:

@@ -79,7 +79,7 @@ def iniciar_puertas(personaje):
     }.get(personaje, pt.pintaMapache)
 
     posiciones_puertas = [-20, 0, 20]
-    z_puerta = -10
+    z_puerta = -18
 
     mensajes = [
         "Primera decisión importante...",
