@@ -12,6 +12,7 @@ import Acciones.escenarios as es
 import Acciones.textos as tx
 from Acciones.sonidos import *
 import Acciones.luces as lc
+from shared import resource_path
 
 # --- Variables globales ---
 posx, posy, posz = 0, 0, 0
@@ -21,6 +22,7 @@ textura_poker = 0  # textura para la parte trasera de las cartas (ID numérico)
 juego_ganado = False  # NUEVO: para controlar cuando se gana
 
 def cargar_textura(ruta):
+    ruta = resource_path(ruta)  # Asegurarse de que la ruta es correcta
     if not os.path.isfile(ruta):
         print(f"[ERROR] No se encontró la imagen: {ruta}")
         return 0
