@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from pygame.locals import *
 from PIL import Image
+from shared import resource_path
 
 pygame.init()
 pygame.mixer.init()
@@ -15,8 +16,7 @@ textura_id = None
 def cargar_textura(filename):
     """Carga una imagen y la convierte en textura para OpenGL."""
     # Obtener la ruta correcta del archivo
-    ruta_base = os.path.dirname(os.path.abspath(__file__))  # Directorio actual
-    ruta_imagen = os.path.join(ruta_base, '..', filename)   # Subir un nivel
+    ruta_imagen = resource_path(filename)   # Subir un nivel
     if not os.path.exists(ruta_imagen):
         raise FileNotFoundError(f"⚠️ No se encontró la imagen: {ruta_imagen}")
     

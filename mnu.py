@@ -3,6 +3,7 @@ import sys
 import os
 import creditos as cred
 from Acciones.sonidos import *
+from shared import resource_path
 
 def mostrar_menu(fondo_path="Menu.jpg"):
     pygame.init()
@@ -21,11 +22,11 @@ def mostrar_menu(fondo_path="Menu.jpg"):
     seleccion = 0
 
     # Cargar fondo
-    if os.path.exists(fondo_path):
-        fondo = pygame.image.load(fondo_path).convert()
+    if os.path.exists(resource_path(fondo_path)):
+        fondo = pygame.image.load(resource_path(fondo_path)).convert()
         fondo = pygame.transform.scale(fondo, pantalla.get_size())
     else:
-        print(f"⚠️ No se encontró el archivo '{fondo_path}', usando fondo gris.")
+        print(f"⚠️ No se encontró el archivo '{resource_path(fondo_path)}', usando fondo gris.")
         fondo = None
 
     def dibujar_opciones():
@@ -66,7 +67,7 @@ def mostrar_menu(fondo_path="Menu.jpg"):
                     if seleccion == 0:
                         return "jugar"
                     elif seleccion == 1:
-                        cred.mostrar_nombres(fondo_path)
+                        cred.mostrar_nombres(resource_path(fondo_path))
                     elif seleccion == 2:
                         pygame.quit()
                         sys.exit()
@@ -78,7 +79,7 @@ def mostrar_menu(fondo_path="Menu.jpg"):
                         if i == 0:
                             return "jugar"
                         elif i == 1:
-                            cred.mostrar_nombres(fondo_path)
+                            cred.mostrar_nombres(resource_path(fondo_path))
                         elif i == 2:
                             pygame.quit()
                             sys.exit()
