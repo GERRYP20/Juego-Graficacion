@@ -137,7 +137,7 @@ figuras_nivel = [draw_pino, draw_puerta, draw_pintamicrofono]
 
 def seleccion_de_nivel():
     configurar_opengl()
-    sonidoOn("sonidos/Nivel.mp3")
+    sonidoOn("Sonidos/Nivel.mp3")
     clock = pygame.time.Clock()
     selected_level = 0
     seleccionando_volver = False

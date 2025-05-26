@@ -235,7 +235,7 @@ def iniciar_lobby(personaje):
                 if event.key==pygame.K_RETURN:
                     resetear_opengl()
                     return True
-                # Cambiar escenario con teclas 1 al 5
+                # Cambiar escenario con teclas 1 al 7
                 if event.key == pygame.K_p:
                     sd.sonidoOn('Sonidos/lobby.mp3')
                 if event.key == pygame.K_o:
@@ -330,6 +330,7 @@ def iniciar_lobby(personaje):
                     pelota2_pos = [0, 50, 0]  # Reinicia posición
                     pelota2_direccion = [0, -1, 0]  # Hacia abajo
                 if event.key == pygame.K_m:
+                    resetear_opengl()
                     return  # Esto te saca del juego y vuelve al menú
    
         # Movimiento de cámara con teclado
@@ -368,9 +369,9 @@ def iniciar_lobby(personaje):
         tx.text("Para mover la camara usar: a,s,d,w,z,x", -25, 34, 0, 30, 0,0,0,255,255,255)
         tx.text("Encender sonido general: p", -25, 32, 0, 30, 0,0,0,255,255,255)
         tx.text("Apagar sonido general: o", -25, 30, 0, 30, 0,0,0,255,255,255)
-        tx.text("Volver al menu: m", -25, 28, 0, 30, 0,0,0,255,255,255)
+        tx.text("Volver a seleccion de personaje: m", -25, 28, 0, 30, 0,0,0,255,255,255)
         tx.text("Presiona u para lanzar la pelota", -25, 26, 0, 30, 0,0,0,255,255,255)
-        #tx.text("Presiona u para lanzar la pelota2", -25, 24, 0, 30, 0,0,0,255,255,255)
+        tx.text("Presiona c para resetear la camara", -25, 24, 0, 30, 0,0,0,255,255,255)
         tx.text("PRESIONA ENTER PARA CONTINUAR", -20, 18, 0, 40, 0,0,0,255,255,255)
         mover_pelota()
         if pelota_activa:

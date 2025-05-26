@@ -56,7 +56,7 @@ def iniciar_puertas(personaje):
     pygame.init()
     pygame.mixer.init()
     glutInit()
-    sonidoOn("sonidos/nivel3.mp3")
+    sonidoOn("Sonidos/nivel3.mp3")
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)

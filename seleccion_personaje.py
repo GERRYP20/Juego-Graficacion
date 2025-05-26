@@ -39,7 +39,7 @@ def configurar_opengl():
     pygame.init()
     pygame.mixer.init()
     sonidoOff()
-    sonidoOn("sonidos/seleccion.mp3")
+    sonidoOn("Sonidos/seleccion.mp3")
     glutInit()
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
 
@@ -183,7 +183,7 @@ def seleccion_de_personaje():
         es.pinta_escenario2("Imagenes/SoteImage.png", "Imagenes/pisoSote.png")
 
         txt.text("¡SELECCIONA TU PERSONAJE!", -17, 12, -18, 50, 255, 255, 255, 0, 0, 255)
-        txt.text("USA LAS FLECHAS DE DIRECCIÓN   O EL MOUSE", -18, 10, -18, 50, 255, 255, 255, 0, 0, 255)
+        txt.text("USA LAS FLECHAS DE DIRECCIÓN  O EL MOUSE", -18, 10, -18, 35, 255, 255, 255, 0, 0, 255)
         txt.text("HUESOS", -1.5, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
         txt.text("GATOPACHE KEVIN", -11, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)
         txt.text("RAPERO MIKEE", 7, 0, 7.5, 30, 255, 255, 255, 0, 0, 255)

@@ -20,6 +20,18 @@ mostrar_resultado = False
 resultado_incorrecto_tiempo = 0
 mostrar_resultado_incorrecto = False
 
+def resetear_opengl():
+    glBindTexture(GL_TEXTURE_2D, 0)
+    glDisable(GL_TEXTURE_2D)
+    glDisable(GL_LIGHTING)
+    glDisable(GL_LIGHT0)
+    glDisable(GL_COLOR_MATERIAL)
+    glDisable(GL_DEPTH_TEST)
+    glClearColor(0, 0, 0, 1)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    pygame.display.quit()
+    pygame.quit()
+
 def reiniciar_esferas():
     esferas_pos[:] = [
         [-30, 40, 0],
@@ -45,6 +57,8 @@ def iniciar_memorama(personaje):
     # Dentro de iniciar_memorama
     puntuacion = 0
     juego_terminado = False
+    TIEMPO_LECTURA = 5  # segundos para leer la pregunta antes de que caigan las pelotas
+    tiempo_inicio_pregunta = None
 
 
     es.ultimo_fondo = None
@@ -61,7 +75,7 @@ def iniciar_memorama(personaje):
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
-    sonidoOn("sonidos/nivel 1.mp3")
+    sonidoOn("Sonidos/nivel 1.mp3")
 
     glEnable(GL_LIGHTING)
     glEnable(GL_LIGHT0)
@@ -139,22 +153,38 @@ def iniciar_memorama(personaje):
         ]
     ]
 
-    tiempo_preguntas = [10, 30, 50, 70, 90, 110]
+    respuestas_correctas = [2, 0, 0, 1, 4, 0]  # Índices de la respuesta correcta para cada pregunta
+    tiempo_preguntas = [5, 22, 42, 62, 82, 102]  # Tiempos en segundos para cada pregunta
     pregunta_mostrada = -1
 
-   # ...existing code...
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sonidoOff()
-                pygame.quit()
+                resetear_opengl()
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sonidoOff()
+                    resetear_opengl()
                     return
-                teclas_activas.add(event.key)
+                elif event.key == pygame.K_RETURN and juego_terminado:
+                        puntuacion = 0
+                        juego_terminado = False
+                        pregunta_mostrada = -1
+                        inicio_tiempo = time.time()
+                        posx, posy, posz = 0, 0, 0
+                        resultado = None
+                        mostrar_resultado = False
+                        mostrar_resultado_incorrecto = False
+                        resultado_tiempo = 0
+                        resultado_incorrecto_tiempo = 0
+                        reiniciar_esferas()
+                        tiempo_inicio_pregunta = None
+                        teclas_activas.clear()
+                else:
+                    teclas_activas.add(event.key)
             if event.type == pygame.KEYUP:
                 teclas_activas.discard(event.key)
 
@@ -174,15 +204,19 @@ def iniciar_memorama(personaje):
 
         if pregunta_actual != pregunta_mostrada:
             reiniciar_esferas()
-            resultado = None  # <-- Limpia el resultado al cambiar de pregunta
+            resultado = None
+            tiempo_inicio_pregunta = time.time()
 
         pregunta_mostrada = pregunta_actual
 
         # Solo procesa resultado si el juego no ha terminado
         if not juego_terminado:
-            # Lógica para mover esferas y obtener resultado solo si hay pregunta activa
             if 0 <= pregunta_mostrada < len(preguntas):
-                resultado = mover_esferas(posx, posy, posz, 0)
+                tiempo_espera = time.time() - (tiempo_inicio_pregunta or time.time())
+                if tiempo_espera >= TIEMPO_LECTURA:
+                    resultado = mover_esferas(posx, posy, posz, respuestas_correctas[pregunta_mostrada])
+                else:
+                    resultado = None
                 if resultado == "correcta":
                     resultado_tiempo = time.time()
                     mostrar_resultado = True
@@ -203,12 +237,12 @@ def iniciar_memorama(personaje):
         personaje_dibujar()
         glPopMatrix()
 
-        tx.text("Presiona ESC para regresar al men\u00fa", -28, 0, 18, 20, 255, 255, 255, 0, 0, 0)
+        tx.text("Presiona ESC para regresar al men\u00fa", -28, 0, 18, 22, 255, 255, 255, 0, 0, 0)
 
         if juego_terminado:
             tx.text("¡Juego terminado!", -12, 30, 0, 32, 255, 255, 0, 0, 0, 0)
             tx.text(f"Tu puntuación: {puntuacion} de {len(preguntas)}", -14, 24, 0, 28, 0, 255, 0, 0, 0, 0)
-            tx.text("Presiona ESC para salir", -12, 18, 0, 22, 255, 255, 255, 0, 0, 0)
+            tx.text("Presiona ENTER para reiniciar", -12, 18, 0, 22, 255, 255, 255, 0, 0, 0)
         elif pregunta_mostrada < 0:
             tx.text("\u00a1Bienvenido a la Tormenta de Decisiones!", -17, 47, 0, 32, 255, 255, 255, 0, 0, 0)
             tx.text("Colócate debajo de la respuesta correcta", -20, 25, 0, 30, 255, 255, 255, 0, 0, 0)

@@ -145,7 +145,7 @@ def iniciar_ruinas(personaje):
     pygame.init()
     pygame.mixer.init()
     glutInit()
-    sonidoOn("sonidos/huesos_soundtrack.mp3")
+    sonidoOn("Sonidos/huesos_soundtrack.mp3")
 
     display = (800, 600)
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
