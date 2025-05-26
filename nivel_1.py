@@ -246,7 +246,7 @@ def iniciar_memorama(personaje):
         elif pregunta_mostrada < 0:
             tx.text("\u00a1Bienvenido a la Tormenta de Decisiones!", -17, 47, 0, 32, 255, 255, 255, 0, 0, 0)
             tx.text("Colócate debajo de la respuesta correcta", -20, 25, 0, 30, 255, 255, 255, 0, 0, 0)
-            tx.text("Muévete con A y S ", -7, 21, 0, 26, 255, 255, 255, 0, 0, 0)
+            tx.text("Muévete con A y D ", -7, 21, 0, 26, 255, 255, 255, 0, 0, 0)
         elif pregunta_mostrada < len(preguntas):
             tx.text(preguntas[pregunta_mostrada], -37, 34, 0, 24, 255, 255, 0, 0, 0, 0)
             dibujar_esferas()

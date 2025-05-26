@@ -196,6 +196,7 @@ def seleccion_de_nivel():
                         if last_clicked_index == i and (now - last_click_time) < DOUBLE_CLICK_TIME:
                             selected_level = i
                             sonidoOff()
+                            resetear_opengl()
                             return nombres_niveles[selected_level]
                         else:
                             selected_level = i
