@@ -132,6 +132,8 @@ def iniciar_puertas(personaje):
             if K_a in teclas_activas: posx -= velocidad
             if K_d in teclas_activas: posx += velocidad
 
+        posx = max(-36, min(36, posx))
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         es.pinta_escenario("Imagenes/ciudad.jpg", "Imagenes/piso3.jpg")
 

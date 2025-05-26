@@ -252,7 +252,13 @@ def iniciar_memorama(personaje):
             dibujar_esferas()
             for i, (x, y, z) in enumerate(esferas_pos):
                 if esferas_activas[i]:
-                    tx.text(opciones_preguntas[pregunta_mostrada][i], x - 6, y + 5, z, 18, 255, 255, 255, 0, 0, 0)
+                    texto = opciones_preguntas[pregunta_mostrada][i]
+                    # Si el texto es muy largo, lo dividimos en dos líneas
+                    if len(texto) > 22:
+                        palabras = texto.split()
+                        mitad = len(palabras) // 2
+                        texto = ' '.join(palabras[:mitad]) + '\n' + ' '.join(palabras[mitad:])
+                    tx.text(texto, x - 6, y + 5, z, 16, 255, 255, 255, 0, 0, 0)
 
         if mostrar_resultado:
             if time.time() - resultado_tiempo < 5:
